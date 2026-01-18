@@ -2,6 +2,7 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 
 
 const generateAccessAndRefreshTokens = async(userId) => {
@@ -260,6 +261,76 @@ const updateBio = asyncHandler(async(req, res) => {
 
 })
 
+const updateAvatar = asyncHandler(async(req, res) => {
+    const localFilePath = req.file?.path
+    
+    if(!localFilePath){
+        throw new ApiError(400, "Avatar file is missing")
+    }
+
+    const avatar = await uploadOnCloudinary(localFilePath)
+
+    if(!avatar.url){
+        throw new ApiError(500, "Something went wrong while uploading on cloudinary")
+    }
+
+    if(req.user.avatar !== "https://res.cloudinary.com/.../default-avatar.png"){
+        const deletedAvatar = await deleteFromCloudinary(localFilePath)
+
+        if(!deletedAvatar){
+            throw new ApiError(500, "Cloudinary delete error")
+        }
+    }
+
+    const user = User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set:{
+                avatar: avatar.url
+            }
+        },
+        { new: true } 
+    ).select("-password -refreshToken")
+
+    return res
+    .status(200)
+    .json( new ApiResponse(200, user, "Avatar updated succesfully"))
+
+})
+
+const removeAvatar = asyncHandler(async(req, res) => {
+    const oldAvatar = req.user.avatar
+
+    if(!oldAvatar){
+        throw new ApiError(400, "Avatar File is missing")
+    }
+
+    if(oldAvatar !== "https://res.cloudinary.com/.../default-avatar.png"){
+        const deletedAvatar = await deleteFromCloudinary(oldAvatar)
+
+        if(!deletedAvatar){
+            throw new ApiError(500, "Cloudinary delete error")
+        }
+    }
+
+    const user = User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set:{
+                avatar: "https://res.cloudinary.com/.../default-avatar.png"
+            }
+        },
+        { new: true } 
+    ).select("-password -refreshToken")
+
+    return res
+    .status(200)
+    .json( new ApiResponse(200, user, "Avatar removed  succesfully"))
+
+})
+
+
+
 
 
 
@@ -276,5 +347,7 @@ export {
     getCurrentUser,
     updateEmail,
     updateFullName,
-    updateBio
+    updateBio,
+    updateAvatar,
+    removeAvatar
 }
