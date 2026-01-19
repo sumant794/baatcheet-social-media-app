@@ -4,6 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { User } from "../models/user.model.js";
 
 const createPost = asyncHandler(async(req, res) => {
     const { caption } = req.body
@@ -81,6 +82,89 @@ const getUserPosts = asyncHandler(async(req, res) => {
   )
 })
 
+const updatePost = asyncHandler(async(req, res) =>{
+    const { caption } = req.body
+    const { postId }  = req.params
+
+    if(!mongoose.isValidObjectId(postId)){
+        throw new ApiError(400, "Invalid Post Id")
+    }
+    
+    if(!caption.trim()){
+        throw new ApiError(400, "Caption is Required")
+    }
+
+    const post = await Post.findById(postId)
+
+    if(!post){
+        throw new ApiError(404, "Post not found")
+    }
+
+    if(post.owner.toString() !== req.user._id.toString()){
+        throw new ApiError(403, "You cannot edit this post")
+    }
+
+    post.caption = caption
+    await post.save()
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, post, "Post updated successfully")
+    )
+
+})
+
+const getFeed = asyncHandler(async(req, res) =>{
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+        throw new ApiError(404, "User not found")
+    }
+
+    const followingIds = user.followingIds
+    followingIds.push(req.user._id)
+
+    const feedPosts = await Post.find({
+        owner: { $in: followingIds }
+    })
+    .populate("owner", "username fullName avatar")
+    .sort({ createdAt: -1 })
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, feedPosts, "Feedposts fetched successfully")
+    )
+
+})
+
+const deletePost = asyncHandler(async(req, res) => {
+    const { postId }  = req.params
+
+    if(!mongoose.isValidObjectId(postId)){
+        throw new ApiError(400, "Invalid Post Id")
+    }
+
+    const post = await Post.findById(postId)
+
+    if(!post){
+        throw new ApiError(404, "Post not found")
+    }
+
+    if(post.owner.toString() !== req.user._id.toString()){
+        throw new ApiError(403, "You cannot delete this post")
+    }
+
+    await Post.findByIdAndDelete(commentId)
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, {}, "Post delted successfully")
+    )
+})
+
 
 
 
@@ -88,5 +172,8 @@ const getUserPosts = asyncHandler(async(req, res) => {
 export {
     createPost,
     getPostById,
-    getUserPosts
+    getUserPosts,
+    updatePost,
+    getFeed,
+    deletePost
 }
