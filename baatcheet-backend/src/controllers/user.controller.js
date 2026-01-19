@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import mongoose, { isValidObjectId } from "mongoose";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -329,6 +330,121 @@ const removeAvatar = asyncHandler(async(req, res) => {
 
 })
 
+const toggleFollow = asyncHandler(async (req, res) => {
+    const { accountId } = req.params
+    const userId = req.user._id
+
+    if (!mongoose.isValidObjectId(accountId)) {
+    throw new ApiError(400, "Invalid account id")
+    }
+
+    if (accountId.toString() === userId.toString()) {
+    throw new ApiError(400, "You cannot follow yourself")
+    }
+
+    const account = await User.findById(accountId)
+
+    if (!account) {
+    throw new ApiError(404, "Account not found")
+    }
+
+    const isFollowing = account.followers.includes(userId)
+
+    if (!isFollowing) {
+        const account = await User.findByIdAndUpdate(
+            accountId,
+            {
+                $addToSet: { followers: userId }  
+            }
+        )
+
+        const user = await User.findByIdAndUpdate(
+            userId, 
+            {
+                $addToSet: { following: accountId }
+            }
+        )
+
+        return res.status(200).json(
+        new ApiResponse(200, {account, user}, "Followed successfully")
+        )
+    } 
+    else {
+        const account = await User.findByIdAndUpdate(
+            accountId, 
+            {
+                $pull: { followers: userId }
+            }
+        )
+
+        const user = await User.findByIdAndUpdate(
+            userId, 
+            {
+                $pull: { following: accountId }
+            }
+        )
+
+        return res.status(200).json(
+        new ApiResponse(200, {}, "Unfollowed successfully")
+        )
+    }
+})
+
+const searchUsers = asyncHandler(async (req, res) => {
+    const { query } = req.query
+
+    if(!query || !query.trim()){
+        return res
+        .status(200).json(
+            new ApiResponse(200, [], "No Query")
+        )
+    }
+
+    const users = await User.find({
+        username:{ $regex: query, $options:"i" }
+    })
+    .select("username avatar fullName")
+    .limit(10)
+
+    //validate users
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, users, "Users fetched Successfully")
+    )
+})
+
+const getUserProfile = asyncHandler(async(req, res) => {
+    const { userId } = req.params
+
+    if(!mongoose.isValidObjectId(userId)){
+        throw new ApiError(400, "Invalid User Id")
+    }
+
+    const user = await User.findById(userId)
+        .select("-password -refreshToken")
+        .populate("followers", "username avatar fullName")
+        .populate("following", "username avatar fullName")
+
+    if(!user){
+        throw new ApiError(404, "User Not Found")
+    }
+
+    const isFollowing = user.followers.some(
+        (follower) => follower._id.toString() === userId.toString()
+    )
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, { user, isFollowing}, "User Profile Fetched Successfully")
+    )
+
+})
+
+
+
 
 
 
@@ -349,5 +465,8 @@ export {
     updateFullName,
     updateBio,
     updateAvatar,
-    removeAvatar
+    removeAvatar,
+    toggleFollow,
+    searchUsers,
+    getUserProfile
 }
