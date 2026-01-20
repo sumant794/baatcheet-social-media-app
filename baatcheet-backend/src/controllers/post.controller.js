@@ -166,9 +166,6 @@ const deletePost = asyncHandler(async(req, res) => {
 })
 
 
-
-
-
 export {
     createPost,
     getPostById,

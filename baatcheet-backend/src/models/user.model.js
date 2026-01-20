@@ -30,8 +30,8 @@ const userSchema = new Schema(
             default: "https://res.cloudinary.com/.../default-avatar.png"
         },
         password:{
-            type:String,
-            required:[true, "Password is required"]
+            type: String,
+            required:[true, 'Password is required']
         },
         bio:{
             type:String,
