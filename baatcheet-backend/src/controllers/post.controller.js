@@ -8,18 +8,19 @@ import { User } from "../models/user.model.js";
 
 const createPost = asyncHandler(async(req, res) => {
     const { caption } = req.body
-
+    console.log(req.body)
     if(!caption || !caption.trim()){
         throw new ApiError(400, "Caption is required")
     }
 
     const imageLocalPath = req.file?.path
+    console.log(req.file)
     if(!imageLocalPath){
         throw new ApiError(400, "Image file is missing")
     }
 
     const image = await uploadOnCloudinary(imageLocalPath)
-
+    console.log(image)
     if(!image?.url){
         throw new ApiError(500, "Image upload failed")
     }
@@ -30,8 +31,8 @@ const createPost = asyncHandler(async(req, res) => {
         owner: req.user._id
     })
 
-    const createdPost = await Video.findById(post._id)
-
+    const createdPost = await Post.findById(post._id)
+    console.log(createdPost)
     if(!createdPost){
         throw new ApiError(500, "Something went wrong while creating post")
     }
@@ -46,7 +47,7 @@ const createPost = asyncHandler(async(req, res) => {
 
 const getPostById = asyncHandler(async(req, res) => {
     const { postId } = req.params
-
+    console.log(req.params)
     if(!mongoose.isValidObjectId(postId)){
         throw new ApiError(400, "Invalid object id")
     }
@@ -54,7 +55,7 @@ const getPostById = asyncHandler(async(req, res) => {
     const post = await Post.findById(postId).populate(
         "owner", "username avatar"
     )
-
+    console.log(post)
     if(!post){
         throw new ApiError(404, "Post does not exist")
     }
@@ -67,25 +68,27 @@ const getPostById = asyncHandler(async(req, res) => {
 })
 
 const getUserPosts = asyncHandler(async(req, res) => {
-  const { userId } = req.params
-
-  if(!mongoose.isValidObjectId(userId)){
+    const { userId } = req.params
+    console.log(req.params)
+    if(!mongoose.isValidObjectId(userId)){
     throw new ApiError(400, "Invalid user id")
-  }
+    }
 
-  const posts = await Post.find({ owner: userId })
+    const posts = await Post.find({ owner: userId })
     .populate("owner", "username avatar fullName")
     .sort({ createdAt: -1 })
-
-  return res.status(200).json(
+    console.log(posts)
+    return res.status(200).json(
     new ApiResponse(200, posts, "User posts fetched successfully")
-  )
+    )
+
 })
 
 const updatePost = asyncHandler(async(req, res) =>{
+    console.log(req.body)
     const { caption } = req.body
     const { postId }  = req.params
-
+    console.log(req.body, req.params)
     if(!mongoose.isValidObjectId(postId)){
         throw new ApiError(400, "Invalid Post Id")
     }
@@ -95,7 +98,7 @@ const updatePost = asyncHandler(async(req, res) =>{
     }
 
     const post = await Post.findById(postId)
-
+    console.log(post)
     if(!post){
         throw new ApiError(404, "Post not found")
     }
@@ -117,20 +120,21 @@ const updatePost = asyncHandler(async(req, res) =>{
 
 const getFeed = asyncHandler(async(req, res) =>{
     const user = await User.findById(req.user._id)
-
+    console.log(user)
     if(!user){
         throw new ApiError(404, "User not found")
     }
 
-    const followingIds = user.followingIds
+    const followingIds = user.following
+    console.log(followingIds)
     followingIds.push(req.user._id)
-
+    
     const feedPosts = await Post.find({
         owner: { $in: followingIds }
     })
     .populate("owner", "username fullName avatar")
     .sort({ createdAt: -1 })
-
+    console.log(feedPosts)
     return res
     .status(200)
     .json(
@@ -141,13 +145,13 @@ const getFeed = asyncHandler(async(req, res) =>{
 
 const deletePost = asyncHandler(async(req, res) => {
     const { postId }  = req.params
-
+    console.log(req.params)
     if(!mongoose.isValidObjectId(postId)){
         throw new ApiError(400, "Invalid Post Id")
     }
 
     const post = await Post.findById(postId)
-
+    console.log(post)
     if(!post){
         throw new ApiError(404, "Post not found")
     }
@@ -156,7 +160,7 @@ const deletePost = asyncHandler(async(req, res) => {
         throw new ApiError(403, "You cannot delete this post")
     }
 
-    await Post.findByIdAndDelete(commentId)
+    await Post.findByIdAndDelete(postId)
 
     return res
     .status(200)
