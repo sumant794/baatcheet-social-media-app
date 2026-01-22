@@ -10,14 +10,14 @@ import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js
 const generateAccessAndRefreshTokens = async(userId) => {
     try {
         const user = await User.findById(userId)
-        //console.log(user)
+        
         const accessToken = user.generateAccessToken()
-        //console.log(accessToken)
+        
         const refreshToken = user.generateRefreshToken()
-        //console.log(refreshToken)
+        
         user.refreshToken = refreshToken
         await user.save({ validateBeforeSave:false })
-        console.log(user)
+        
         return {accessToken, refreshToken}
     } catch (error) {
         throw new ApiError(500, "Something went wrong while generating tokens")
@@ -26,7 +26,7 @@ const generateAccessAndRefreshTokens = async(userId) => {
 
 const registerUser = asyncHandler(async(req, res) => {
     const {username, email, fullName, password} = req.body
-    console.log(req.body)
+    
     if([username, email, fullName, password].some((field) => field?.trim() === "")){
         throw new ApiError(400, "All fields are required")
     }
@@ -34,7 +34,7 @@ const registerUser = asyncHandler(async(req, res) => {
     const existedUser = await User.findOne({
         $or:[{ username }, { email }]
     })
-    console.log(existedUser)
+   
     if(existedUser){
         throw new ApiError(400, "User with this email or username already exists")
     }
@@ -49,7 +49,7 @@ const registerUser = asyncHandler(async(req, res) => {
     const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
     )
-    console.log(createdUser)
+    
     if(!createdUser){
         throw new ApiError(500, "Something went wrong while registering user")
     }
@@ -64,7 +64,7 @@ const registerUser = asyncHandler(async(req, res) => {
 
 const loginUser = asyncHandler(async(req, res) => {
     const {username, email, password} = req.body
-    console.log(req.body)
+    
     if(!username && !email){
         throw new ApiError(400, "Username or email is required")
     }
@@ -72,13 +72,13 @@ const loginUser = asyncHandler(async(req, res) => {
     const user = await User.findOne({
         $or:[{ username }, { email }]
     })
-    console.log(user)
+    
     if(!user){
         throw new ApiError(404, "User does not exist")
     }
 
     const isPasswordValid = await user.isPasswordCorrect(password)
-    console.log(isPasswordValid)
+    
     if(!isPasswordValid){
         throw new ApiError(401, "Invalid User Credentials")
     }
@@ -88,7 +88,7 @@ const loginUser = asyncHandler(async(req, res) => {
     const loggedInUser = await User.findById(user._id).select(
         "-password"
     )
-    console.log(loggedInUser)
+    
     const options = {
         httpOnly:true,
         secure:true
@@ -105,9 +105,7 @@ const loginUser = asyncHandler(async(req, res) => {
 })
 
 const logoutUser = asyncHandler(async(req, res) => {
-    const User1 = await User.findById(req.user._id)
-    console.log(User1)
-    const user = await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
         req.user._id,
         {
             $unset:{
@@ -118,7 +116,7 @@ const logoutUser = asyncHandler(async(req, res) => {
             new:true
         }
     )
-    console.log(user)
+    
     const options = {
         httpOnly: true,
         secure: true
@@ -133,16 +131,16 @@ const logoutUser = asyncHandler(async(req, res) => {
 
 const refreshAccessToken = asyncHandler(async(req, res) => {
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
-    console.log(incomingRefreshToken)
+    
     if(!incomingRefreshToken){
         throw new ApiError(401, "Unauthorized Request")
     }
 
     try {
         const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET)
-        console.log(decodedToken)
+        
         const user = await User.findById(decodedToken?._id)
-        console.log(user)
+        
         if(!user){
             throw new ApiError(401, "Invalid Refresh Token")
         }
@@ -179,20 +177,20 @@ const refreshAccessToken = asyncHandler(async(req, res) => {
 
 const changeCurrentPassword = asyncHandler(async(req, res) => {
     const { oldPassword, newPassword } = req.body
-    console.log(req.body)
+    
     
     const user = await User.findById(req.user._id)
-    console.log(user)
+    
     const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
-    console.log(isPasswordCorrect)
+    
     if(!isPasswordCorrect){
         throw new ApiError(404, "Invalid Old Password")
     }
 
     user.password = newPassword
-    console.log(user.password)
+    
     await user.save({validateBeforeSave:false})
-    console.log(user)
+    
     return res
     .status(200)
     .json(new ApiResponse(200, {}, "Password Changed Successfully"))
@@ -207,7 +205,7 @@ const getCurrentUser = asyncHandler(async(req, res) => {
 
 const updateEmail = asyncHandler(async(req, res) => {
     const { email } = req.body
-    console.log(req.body)
+    
     if(!email.trim()){
         throw new ApiError(400, "Email is required")
     }
@@ -230,7 +228,7 @@ const updateEmail = asyncHandler(async(req, res) => {
 
 const updateFullName = asyncHandler(async(req, res) => {
     const { fullName } = req.body
-    console.log(fullName)
+    
     if(!fullName.trim()){
         throw new ApiError(400, "FullName is  required")
     }
@@ -272,21 +270,21 @@ const updateBio = asyncHandler(async(req, res) => {
 
 const updateAvatar = asyncHandler(async(req, res) => {
     const localFilePath = req.file?.path
-    console.log(req.file)
+    
     if(!localFilePath){
         throw new ApiError(400, "Avatar file is missing")
     }
 
     if(req.user.avatar !== "https://res.cloudinary.com/.../default-avatar.png"){
         const deletedAvatar = await deleteFromCloudinary(req.user.avatar)
-        console.log(deletedAvatar)
+        
         if(!deletedAvatar){
             throw new ApiError(500, "Cloudinary delete error")
         }
     }
 
     const avatar = await uploadOnCloudinary(localFilePath)
-    console.log(avatar)
+    
     if(!avatar.url){
         throw new ApiError(500, "Something went wrong while uploading on cloudinary")
     }
@@ -310,14 +308,14 @@ const updateAvatar = asyncHandler(async(req, res) => {
 
 const removeAvatar = asyncHandler(async(req, res) => {
     const oldAvatar = req.user.avatar
-    console.log(oldAvatar)
+    
     if(!oldAvatar){
         throw new ApiError(400, "Avatar File is missing")
     }
 
     if(oldAvatar !== "https://res.cloudinary.com/.../default-avatar.png"){
         const deletedAvatar = await deleteFromCloudinary(oldAvatar)
-        console.log(deletedAvatar)
+        
         if(!deletedAvatar){
             throw new ApiError(500, "Cloudinary delete error")
         }
@@ -341,7 +339,7 @@ const removeAvatar = asyncHandler(async(req, res) => {
 
 const toggleFollow = asyncHandler(async (req, res) => {
     const { accountId } = req.params
-    console.log(req.params)
+    
     const userId = req.user._id
 
     if (!mongoose.isValidObjectId(accountId)) {
@@ -353,13 +351,13 @@ const toggleFollow = asyncHandler(async (req, res) => {
     }
 
     const account = await User.findById(accountId)
-    console.log(account)
+   
     if (!account) {
     throw new ApiError(404, "Account not found")
     }
 
     const isFollowing = account.followers.includes(userId)
-    console.log(isFollowing)
+    
     if (!isFollowing) {
         const account = await User.findByIdAndUpdate(
             accountId,
@@ -368,7 +366,7 @@ const toggleFollow = asyncHandler(async (req, res) => {
             },
             { new:true }
         )
-        console.log(account)
+        
         const user = await User.findByIdAndUpdate(
             userId, 
             {
@@ -376,7 +374,7 @@ const toggleFollow = asyncHandler(async (req, res) => {
             },
             { new:true }
         )
-        console.log(user)
+        
         return res.status(200).json(
         new ApiResponse(200, {account, user}, "Followed successfully")
         )
@@ -406,7 +404,7 @@ const toggleFollow = asyncHandler(async (req, res) => {
 
 const searchUsers = asyncHandler(async (req, res) => {
     const { query } = req.query
-    console.log(req.query)
+   
     if(!query || !query.trim()){
         return res
         .status(200).json(
@@ -419,7 +417,7 @@ const searchUsers = asyncHandler(async (req, res) => {
     })
     .select("username avatar fullName")
     .limit(10)
-    console.log(users)
+    
     //validate users
 
     return res
@@ -431,7 +429,7 @@ const searchUsers = asyncHandler(async (req, res) => {
 
 const getUserProfile = asyncHandler(async(req, res) => {
     const { userId } = req.params
-    console.log(userId)
+    
     if(!mongoose.isValidObjectId(userId)){
         throw new ApiError(400, "Invalid User Id")
     }
@@ -440,7 +438,7 @@ const getUserProfile = asyncHandler(async(req, res) => {
         .select("-password -refreshToken")
         .populate("followers", "username avatar fullName")
         .populate("following", "username avatar fullName")
-    console.log(user)
+    
     if(!user){
         throw new ApiError(404, "User Not Found")
     }
@@ -448,7 +446,7 @@ const getUserProfile = asyncHandler(async(req, res) => {
     const isFollowing = user.followers.some(
         (follower) => follower._id.toString() === userId.toString()
     )
-    console.log(isFollowing)
+    
     return res
     .status(200)
     .json(
