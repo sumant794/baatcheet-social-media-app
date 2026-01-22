@@ -1,0 +1,91 @@
+.login-container {
+    width: 100vw;
+    height: 100vh;
+    background-image: url("/login-bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card{
+    background: white;
+    width: 90%;
+    max-width: 380px;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #ff416c;
+}
+
+.logo span {
+    margin-left: 8px;
+    margin-right: 10px;
+}
+
+.login-card h2 {
+    margin: 5px 0;
+}
+
+.login-card p {
+    color: #777;
+    margin-left: 8px;
+    margin-bottom: 20px;
+}
+
+.login-form input {
+    width: 95%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    outline: none;
+    font-size: 14px;
+}
+
+.login-form input:focus {
+  border-color: #ff416c;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #8e2de2, #ff416c);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.login-form button:hover {
+  opacity: 0.9;
+}
+
+.forgot {
+    margin-top: 15px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.signup {
+    margin-top:20px;
+    font-size: 14px;
+}
+
+.signup span {
+  color: #ff416c;
+  font-weight: bold;
+  cursor: pointer;
+}
