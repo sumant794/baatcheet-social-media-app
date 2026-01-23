@@ -22,4 +22,16 @@ import postRouter from "./routes/post.routes.js"
 app.use("/api/v1/users", userRouter) //http://localhost:8000/api/v1/users/register
 app.use("/api/v1/post", postRouter)
 
+
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500
+  const message = err.message || "Something went wrong"
+
+  return res.status(statusCode).json({
+    success: false,
+    message
+  })
+})
+
+
 export { app }

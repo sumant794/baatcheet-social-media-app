@@ -14,6 +14,8 @@ export default function Register(){
     })
 
     const [loading, setLoading] = useState(false)
+    const [success, setSuccess] = useState("")
+    const [error, setError] = useState("")
 
     const handleChange = (e) => {
         setFormData({
@@ -25,15 +27,15 @@ export default function Register(){
     const handleRegister = async(e) => {
         e.preventDefault()
         setLoading(true)
-
+        setError("")
         try {
             console.log(formData)
             await api.post("/users/register", formData)
 
-            alert("Registered Succesfully")
-            navigate("/")
+            setSuccess("Registered Successfully 🎉 Redirecting to login...")
+            setTimeout(() => navigate("/"), 3000)
         } catch (error) {
-            alert(error.response?.data?.message || "Registration failed")
+            setError(error.response?.data?.message || "Registration failed")
         } finally {
             setLoading(false)
         }
@@ -79,6 +81,9 @@ export default function Register(){
                         {loading ? "Registering...": "Register"}
                     </button>
                 </form>
+
+                {success && <p className="success-text">{success}</p>}
+                {error && <p className="error-text">{error}</p>}
 
                 <p className="login">
                     Already registerd? <span><Link to="/">Log In Then</Link></span>

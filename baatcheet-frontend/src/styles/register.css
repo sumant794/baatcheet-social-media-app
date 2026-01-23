@@ -79,3 +79,17 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+.success-text {
+  color: green;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.error-text {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
