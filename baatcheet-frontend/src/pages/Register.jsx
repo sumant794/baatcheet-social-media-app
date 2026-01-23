@@ -36,6 +36,8 @@ export default function Register(){
             setTimeout(() => navigate("/"), 3000)
         } catch (error) {
             setError(error.response?.data?.message || "Registration failed")
+            console.log(error.response)
+            setTimeout(() => setError(""), 3000)
         } finally {
             setLoading(false)
         }

@@ -89,3 +89,10 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+.error-text {
+  color: red !important;
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}
