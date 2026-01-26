@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { FaImage } from "react-icons/fa"
 import "../styles/createPost.css"
+import api from "../api/axios.js"
+
 export default function CreatePostcard(){
     const [caption, setCaption] = useState("")
     const [image, setImage] = useState(null)
@@ -14,11 +16,33 @@ export default function CreatePostcard(){
         }
     }
 
-    const handlePost = () => {
+    const handlePost = async () => {
         if(!caption.trim() || !image){
             alert("Image and caption is required")
+            return
         }
-        console.log("Raady to send->", caption, image)
+        try {
+            const formData = new FormData()
+            formData.append("caption", caption)
+            formData.append("image", image)
+
+            const response = await api.post("/post/create", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            })
+            console.log(response)
+            console.log("Post Created:", response.data)
+
+            setCaption("")
+            setImage(null)
+            setImagePreview(null)
+
+            alert("Post uploaded successfully ✅")
+        } catch (error) {
+            console.log(error)
+            alert(error.response?.data?.message || "Post upload failed")
+        }
     }
 
     return(
