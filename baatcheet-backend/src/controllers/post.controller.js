@@ -8,7 +8,7 @@ import { User } from "../models/user.model.js";
 
 const createPost = asyncHandler(async(req, res) => {
     const { caption } = req.body
-
+    console.log(req.body)
     if(!caption || !caption.trim()){
         throw new ApiError(400, "Caption is required")
     }
@@ -119,6 +119,7 @@ const updatePost = asyncHandler(async(req, res) =>{
 })
 
 const getFeed = asyncHandler(async(req, res) =>{
+    console.log("getFeed is being hit")
     const user = await User.findById(req.user._id)
 
     if(!user){
