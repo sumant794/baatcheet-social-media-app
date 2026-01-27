@@ -1,19 +1,20 @@
 import "../styles/feedpost.css"
 import { FaRegHeart, FaRegCommentDots, FaShare } from "react-icons/fa"
 
-export default function FeedPostCard() {
+export default function FeedPostCard({ post }) {
+    console.log("Sumant", post)
     return (
         <div className="feed-post-card">
 
             <div className="feed-post-header">
                 <div className="avatar-and-username">
-                    <img src="https://i.pravatar.cc/40"alt="user"/>
-                    <span>Sumant Kumar</span>
+                    <img src= {post.owner.avatar ? post.owner.avatar : "/default-avatar.png"} alt="user"/>
+                    <span>{post.owner.username}</span>
                 </div>
                 <button>Follow</button>
             </div>
 
-            <img className="feed-post-image" src="public/login-bg.png" alt="post" />
+            <img className="feed-post-image" src={post.image} alt="post" />
 
             <div className="feed-post-actions">
                 <FaRegHeart />
@@ -22,8 +23,8 @@ export default function FeedPostCard() {
             </div>
 
             <p className="feed-post-caption">
-                <strong>Sumant Kumar  </strong>
-                 I think i am mindless
+                <strong>{post.owner.username}  </strong>
+                 {post.caption}
             </p>
 
         </div>

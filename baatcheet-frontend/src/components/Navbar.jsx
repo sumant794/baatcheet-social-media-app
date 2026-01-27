@@ -1,15 +1,18 @@
 import { Link } from "react-router-dom"
 import "../styles/navbar.css"
 import { FaSearch, FaHome, FaUser, FaPlusSquare, FaPowerOff, FaRegCommentDots } from "react-icons/fa"
+import { useAuth } from "../context/AuthContext"
 export default function Navbar(){
+    const { user } = useAuth()
+    console.log(user)
     return(
         <nav className="navbar">
         
             <div className="left-section">
-                <img src="public/nav-img.webp"/>
+                <img src={user?.avatar ? user.avatar : "/default-avatar.png"}/>
                 <div className="nav-logo">
                     <h2>Baatcheet</h2>
-                    <span>Sumant Kumar</span>
+                    <span>{user?.fullName || "user"}</span>
                 </div>
             </div>
 
@@ -21,7 +24,7 @@ export default function Navbar(){
             <div className="right-section"> 
                 <div className="nav-item">
                     <FaHome className="nav-icon"/>
-                    <Link to="home">Home</Link>
+                    <Link to="/home">Home</Link>
                 </div>
 
                 <div className="nav-item">
@@ -31,7 +34,7 @@ export default function Navbar(){
 
                 <div className="nav-item">
                     <FaUser className="nav-icon"/>
-                    <Link to="profile">Profile</Link>
+                    <Link to="/profile">Profile</Link>
                 </div>
 
                 <button><FaPowerOff /></button>

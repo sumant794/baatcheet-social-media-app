@@ -9,6 +9,7 @@
     background: white;
     border: 1px solid #e6e6e6;
     border-radius: 10px;
+    overflow: hidden;
 }
 
 .feed-post-header {
@@ -27,8 +28,8 @@
 }
 
 .feed-post-header img {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
 }
 
@@ -41,6 +42,10 @@
     border: none;
     border-radius: 2px;
     cursor: pointer;
+}
+
+.feed-post-header button:hover {
+    background-color: #0247a1;
 }
 
 .feed-post-image{

@@ -121,7 +121,7 @@ const updatePost = asyncHandler(async(req, res) =>{
 const getFeed = asyncHandler(async(req, res) =>{
     console.log("getFeed is being hit")
     const user = await User.findById(req.user._id)
-
+    console.log(user)
     if(!user){
         throw new ApiError(404, "User not found")
     }
@@ -135,7 +135,7 @@ const getFeed = asyncHandler(async(req, res) =>{
     })
     .populate("owner", "username fullName avatar")
     .sort({ createdAt: -1 })
-    
+    console.log(feedPosts)
     return res
     .status(200)
     .json(

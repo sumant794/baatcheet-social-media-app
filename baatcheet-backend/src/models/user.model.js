@@ -27,7 +27,7 @@ const userSchema = new Schema(
         },
         avatar:{
             type:String,
-            default: "https://res.cloudinary.com/.../default-avatar.png"
+            default: ""
         },
         password:{
             type: String,

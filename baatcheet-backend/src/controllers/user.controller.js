@@ -199,6 +199,7 @@ const changeCurrentPassword = asyncHandler(async(req, res) => {
 })
 
 const getCurrentUser = asyncHandler(async(req, res) => {
+    console.log("getcurrentuser")
     return res
     .status(200)
     .json(new ApiResponse(200, req.user, "Current User fetched Succesfully"))
@@ -276,14 +277,12 @@ const updateAvatar = asyncHandler(async(req, res) => {
         throw new ApiError(400, "Avatar file is missing")
     }
 
-    if(req.user.avatar !== "https://res.cloudinary.com/.../default-avatar.png"){
-        const deletedAvatar = await deleteFromCloudinary(req.user.avatar)
-        
-        if(!deletedAvatar){
-            throw new ApiError(500, "Cloudinary delete error")
-        }
+    const deletedAvatar = await deleteFromCloudinary(req.user.avatar)
+    
+    if(!deletedAvatar){
+        throw new ApiError(500, "Cloudinary delete error")
     }
-
+ 
     const avatar = await uploadOnCloudinary(localFilePath)
     
     if(!avatar.url){
@@ -314,19 +313,17 @@ const removeAvatar = asyncHandler(async(req, res) => {
         throw new ApiError(400, "Avatar File is missing")
     }
 
-    if(oldAvatar !== "https://res.cloudinary.com/.../default-avatar.png"){
-        const deletedAvatar = await deleteFromCloudinary(oldAvatar)
-        
-        if(!deletedAvatar){
-            throw new ApiError(500, "Cloudinary delete error")
-        }
+    const deletedAvatar = await deleteFromCloudinary(oldAvatar)
+    
+    if(!deletedAvatar){
+        throw new ApiError(500, "Cloudinary delete error")
     }
 
     const user = await User.findByIdAndUpdate(
         req.user._id,
         {
             $set:{
-                avatar: "https://res.cloudinary.com/.../default-avatar.png"
+                avatar: ""
             }
         },
         { new: true } 

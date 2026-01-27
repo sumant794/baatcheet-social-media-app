@@ -2,11 +2,15 @@ import { useState } from "react"
 import { FaImage } from "react-icons/fa"
 import "../styles/createPost.css"
 import api from "../api/axios.js"
+import { useAuth } from "../context/AuthContext"
 
-export default function CreatePostcard(){
+
+
+export default function CreatePostcard({ onPostCreated }){
     const [caption, setCaption] = useState("")
     const [image, setImage] = useState(null)
     const [imagePreview, setImagePreview] = useState(null)
+    const { user } = useAuth()
 
     const handleImageChange = (e) => {
         const file = e.target.files[0]
@@ -37,7 +41,7 @@ export default function CreatePostcard(){
             setCaption("")
             setImage(null)
             setImagePreview(null)
-
+            onPostCreated()
             alert("Post uploaded successfully ✅")
         } catch (error) {
             console.log(error)
@@ -45,6 +49,7 @@ export default function CreatePostcard(){
         }
     }
 
+    
     return(
         <div className="create-post-card">
 
@@ -52,11 +57,11 @@ export default function CreatePostcard(){
 
                 <div className="create-post-header">
                     <img 
-                        src="https://i.pravatar.cc/40"
+                        src={user?.avatar || "/default-avatar.png"}
                         className="create-post-avatar"
                         alt="user"
                     />
-                    <span className="create-post-username">Sumant Kumar</span>
+                    <span className="create-post-username">{user?.fullName || "User"}</span>
                 </div>
 
                 <textarea 
