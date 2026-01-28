@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom"
 import "../styles/login.css"
 import { useState } from "react"
+import { useAuth } from "../context/useAuth.js"
 import api from "../api/axios.js"
 
 export default function Login(){
@@ -13,6 +14,7 @@ export default function Login(){
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
+    const { setUser } = useAuth()
 
     const handleChange = (e) => {
         setFormData({
@@ -28,8 +30,15 @@ export default function Login(){
 
         try {
             console.log(formData)
-            await api.post("/users/login", formData)
-            navigate("/home")
+            const res = await api.post("/users/login", formData)
+            console.log("Login response:", res.data)
+            const userData = res.data.data
+            console.log("User data from login:", userData)
+            setUser(userData)
+            // Ensure state is updated before navigation
+            setTimeout(() => {
+                navigate("/home")
+            }, 0)
         } catch (error) {
             setError(error.response?.data?.message || "Login failed")
             console.log(error.response)

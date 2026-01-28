@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom"
 import "../styles/navbar.css"
 import { FaSearch, FaHome, FaUser, FaPlusSquare, FaPowerOff, FaRegCommentDots } from "react-icons/fa"
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/useAuth.js"
+
 export default function Navbar(){
     const { user } = useAuth()
-    console.log(user)
+    console.log("Navbar rendering with user:", user)
     return(
         <nav className="navbar">
         

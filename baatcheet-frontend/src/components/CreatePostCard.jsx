@@ -2,8 +2,7 @@ import { useState } from "react"
 import { FaImage } from "react-icons/fa"
 import "../styles/createPost.css"
 import api from "../api/axios.js"
-import { useAuth } from "../context/AuthContext"
-
+import { useAuth } from "../context/useAuth.js"
 
 
 export default function CreatePostcard({ onPostCreated }){
@@ -11,6 +10,7 @@ export default function CreatePostcard({ onPostCreated }){
     const [image, setImage] = useState(null)
     const [imagePreview, setImagePreview] = useState(null)
     const { user } = useAuth()
+    console.log("CreatePostCard rendering with user:", user)
 
     const handleImageChange = (e) => {
         const file = e.target.files[0]

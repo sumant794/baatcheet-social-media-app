@@ -1,55 +1,66 @@
 .login-container {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
     background-image: url("/login-bg.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 15px;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .login-card{
     background: white;
-    width: 90%;
+    width: 100%;
     max-width: 380px;
-    padding: 40px;
+    padding: 35px 25px;
     border-radius: 20px;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .logo {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     color: #ff416c;
 }
 
 .logo span {
-    margin-left: 8px;
-    margin-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .login-card h2 {
-    margin: 5px 0;
+    margin: 3px 0;
+    font-size: 22px;
+    line-height: 1.2;
 }
 
 .login-card p {
     color: #777;
-    margin-left: 8px;
-    margin-bottom: 20px;
+    margin: 8px 0 15px 0;
+    font-size: 13px;
 }
 
 .login-form input {
-    width: 95%;
-    padding: 12px;
-    margin: 8px 0;
+    width: 100%;
+    padding: 10px 12px;
+    margin: 7px 0;
     border-radius: 10px;
     border: 1px solid #ddd;
     outline: none;
     font-size: 14px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
 }
 
 .login-form input:focus {
@@ -58,30 +69,37 @@
 
 .login-form button {
     width: 100%;
-    padding: 12px;
-    margin-top: 15px;
+    padding: 11px;
+    margin-top: 12px;
     border: none;
     border-radius: 25px;
     background: linear-gradient(135deg, #8e2de2, #ff416c);
     color: white;
-    font-size: 16px;
+    font-size: 15px;
     cursor: pointer;
     font-weight: bold;
+    transition: opacity 0.3s ease;
 }
 
 .login-form button:hover {
   opacity: 0.9;
 }
 
+.login-form button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .forgot {
-    margin-top: 15px;
-    font-size: 13px;
+    margin-top: 12px;
+    font-size: 12px;
     cursor: pointer;
+    color: #777;
 }
 
 .signup {
-    margin-top:20px;
-    font-size: 14px;
+    margin-top: 15px;
+    font-size: 13px;
 }
 
 .signup span {
@@ -93,6 +111,117 @@
 .error-text {
   color: red !important;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 8px;
   font-weight: bold;
+  font-size: 12px;
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 480px) {
+    .login-container {
+        padding: 10px;
+    }
+
+    .login-card {
+        padding: 25px 18px;
+        border-radius: 15px;
+    }
+
+    .logo {
+        font-size: 22px;
+        margin-bottom: 8px;
+    }
+
+    .login-card h2 {
+        font-size: 18px;
+    }
+
+    .login-card p {
+        font-size: 12px;
+        margin: 6px 0 12px 0;
+    }
+
+    .login-form input {
+        padding: 9px 10px;
+        margin: 5px 0;
+        font-size: 13px;
+    }
+
+    .login-form button {
+        padding: 10px;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .forgot {
+        margin-top: 10px;
+        font-size: 11px;
+    }
+
+    .signup {
+        margin-top: 12px;
+        font-size: 12px;
+    }
+
+    .error-text {
+        font-size: 11px;
+        margin-top: 6px;
+    }
+}
+
+/* Tablet and larger devices */
+@media (min-width: 768px) {
+    .login-container {
+        padding: 0;
+        background-attachment: scroll;
+    }
+
+    .login-card {
+        padding: 45px;
+        max-height: none;
+        overflow-y: visible;
+    }
+
+    .logo {
+        font-size: 32px;
+        margin-bottom: 15px;
+    }
+
+    .login-card h2 {
+        font-size: 26px;
+        margin: 8px 0;
+    }
+
+    .login-card p {
+        font-size: 14px;
+        margin: 10px 0 20px 0;
+    }
+
+    .login-form input {
+        padding: 12px;
+        margin: 8px 0;
+        font-size: 14px;
+    }
+
+    .login-form button {
+        padding: 12px;
+        margin-top: 15px;
+        font-size: 16px;
+    }
+
+    .login-form button:active {
+        transform: scale(0.98);
+    }
+
+    .forgot {
+        margin-top: 15px;
+        font-size: 13px;
+    }
+
+    .signup {
+        margin-top: 20px;
+        font-size: 14px;
+    }
+}
+
+
