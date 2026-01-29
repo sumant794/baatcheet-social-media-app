@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from "react"
-import api from "../api/axios"
+import api from "../api/axios.js"
 import AuthContext from "./AuthContext"
 
 export const AuthProvider = ({ children }) => {
