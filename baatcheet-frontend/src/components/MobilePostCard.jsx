@@ -1,0 +1,95 @@
+import { useState } from "react"
+import { FaImage } from "react-icons/fa"
+import "../styles/mobilepostcard.css"
+import api from "../api/axios.js"
+import { useAuth } from "../context/useAuth.js"
+
+export default function MobilePostcard({ onPostCreated }) {
+  const [caption, setCaption] = useState("")
+  const [image, setImage] = useState(null)
+  const [imagePreview, setImagePreview] = useState(null)
+  const { user } = useAuth()
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setImage(file)
+      setImagePreview(URL.createObjectURL(file))
+    }
+  }
+
+  const handlePost = async () => {
+    if (!caption.trim() || !image) {
+      alert("Image and caption is required")
+      return
+    }
+
+    try {
+      const formData = new FormData()
+      formData.append("caption", caption)
+      formData.append("image", image)
+
+      await api.post("/post/create", formData)
+      setCaption("")
+      setImage(null)
+      setImagePreview(null)
+      onPostCreated?.()
+      alert("Post uploaded successfully ✅")
+    } catch (err) {
+      alert("Post upload failed")
+    }
+  }
+
+  return (
+    
+    <div className="mobile-post-card">
+
+      <div className="mobile-post-header">
+        <img
+          src={user?.avatar || "/default-avatar.png"}
+          className="mobile-post-avatar"
+          alt="user"
+        />
+        <span className="mobile-post-username">
+          {user?.fullName || "User"}
+        </span>
+      </div>
+
+
+      <div className="mobile-post-image">
+        {imagePreview ? (
+          <img src={imagePreview} alt="preview" />
+        ) : (
+          <div className="mobile-image-placeholder">Image Preview</div>
+        )}
+      </div>
+
+
+      <textarea
+        className="mobile-post-textarea"
+        placeholder="What's on your mind? Just type..."
+        value={caption}
+        onChange={(e) => setCaption(e.target.value)}
+      />
+
+
+      <div className="mobile-post-actions">
+        <label className="mobile-upload-btn">
+            <div className="upload-text">
+                <FaImage className="mobile-img-icon" />
+                <span>Choose from gallery</span>
+            </div>
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={handleImageChange}
+          />
+        </label>
+
+        <button onClick={handlePost}>Post</button>
+      </div>
+
+    </div>
+  )
+}

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { FaImage } from "react-icons/fa"
-import "../styles/createPost.css"
+import "../styles/createpostcard.css"
 import api from "../api/axios.js"
 import { useAuth } from "../context/useAuth.js"
 

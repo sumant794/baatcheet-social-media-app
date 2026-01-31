@@ -29,7 +29,9 @@ export default function Home() {
     return(
     <div className="home-page">
       <Navbar />
-      <CreatePostCard onPostCreated={fetchFeed}/>
+	  <div className="create-post-wrapper">
+			<CreatePostCard onPostCreated={fetchFeed}/>
+	  </div>
 	  {loading && <p style={{ textAlign:"center" }}>Loading feed...</p>}
 
       {posts.map(post => (

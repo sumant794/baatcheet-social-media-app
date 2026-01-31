@@ -6,6 +6,7 @@ import Home from "./pages/Home.jsx"
 import './App.css'
 import { useAuth } from "./context/useAuth.js"
 import Profile from "./pages/Profile.jsx"
+import CreatePost from "./pages/CreatePost.jsx"
 
 function App() {
   const { loading } = useAuth()
@@ -20,6 +21,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/home" element={<Home />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/create-post" element={<CreatePost />} />
     </Routes>
   )
 }

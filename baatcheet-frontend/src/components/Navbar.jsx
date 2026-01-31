@@ -2,9 +2,11 @@ import { Link } from "react-router-dom"
 import "../styles/navbar.css"
 import { FaSearch, FaHome, FaUser, FaPlus, FaPowerOff, FaRegCommentDots } from "react-icons/fa"
 import { useAuth } from "../context/useAuth.js"
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar(){
     const { user } = useAuth()
+    const navigate = useNavigate()
     console.log("Navbar rendering with user:", user)
     return(
         <nav className="navbar">
@@ -41,8 +43,8 @@ export default function Navbar(){
 
                 <button><FaPowerOff /></button>
 
-                <div className="nav-item-5">
-                    <FaPlus className />
+                <div className="nav-item-5" onClick={() => navigate("/create-post")}>
+                    <FaPlus  />
                 </div>
             </div> 
                 

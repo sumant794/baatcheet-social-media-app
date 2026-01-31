@@ -82,7 +82,6 @@
 }
 
 .right-section {
-    
     width: 480px;
     display: flex;
     justify-content: space-between;
@@ -145,7 +144,7 @@
 
     .middle-section {
         margin-left:10px;
-        margin-right: 20px;
+        margin-right: 10px;
     }
 
     .middle-section input {
@@ -153,6 +152,9 @@
         color: black;
     }
 
+    .right-section {
+        padding:10px;
+    }
     .right-section .nav-item {
         display: none;
     }

@@ -1,10 +1,7 @@
 .navbar-bottom {
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 50px;
+    display: none;
     background-color: white;
-    border: 1px solid gray;
     position: sticky;
     bottom:0;
     z-index: 100;
@@ -13,14 +10,26 @@
 
 
 
-@media (max-width:1400px){
-    .navbar-bottom {
-        display: none;
-    }
-}
+
    
 @media (max-width: 480px){
     .navbar-bottom {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0px 20px;
     }
+
+    .bottom-nav-item {
+        color:#1877f2;
+        font-size: 25px;
+    }
+
+    .navbar-bottom button{
+        border: none;
+        background: none;
+        font-size: 25px;
+        color:#1877f2;
+    }
+
 }
