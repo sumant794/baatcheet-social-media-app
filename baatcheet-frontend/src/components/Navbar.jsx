@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import "../styles/navbar.css"
-import { FaSearch, FaHome, FaUser, FaPlusSquare, FaPowerOff, FaRegCommentDots } from "react-icons/fa"
+import { FaSearch, FaHome, FaUser, FaPlus, FaPowerOff, FaRegCommentDots } from "react-icons/fa"
 import { useAuth } from "../context/useAuth.js"
 
 export default function Navbar(){
@@ -10,6 +10,7 @@ export default function Navbar(){
         <nav className="navbar">
         
             <div className="left-section">
+                <div className="mobile-logo">B</div>
                 <img src={user?.avatar ? user.avatar : "/default-avatar.png"}/>
                 <div className="nav-logo">
                     <h2>Baatcheet</h2>
@@ -39,7 +40,11 @@ export default function Navbar(){
                 </div>
 
                 <button><FaPowerOff /></button>
-            </div>
+
+                <div className="nav-item-5">
+                    <FaPlus className />
+                </div>
+            </div> 
                 
                 
         </nav>

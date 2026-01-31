@@ -1,0 +1,26 @@
+.navbar-bottom {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid gray;
+    position: sticky;
+    bottom:0;
+    z-index: 100;
+}
+
+
+
+
+@media (max-width:1400px){
+    .navbar-bottom {
+        display: none;
+    }
+}
+   
+@media (max-width: 480px){
+    .navbar-bottom {
+        display: block;
+    }
+}

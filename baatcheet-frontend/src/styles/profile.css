@@ -57,7 +57,7 @@
   font-weight: bold;
 }
 
-/* ===== Posts Section ===== */
+
 
 .profile-posts {
   margin-top: 30px;
@@ -100,7 +100,7 @@
 }
 
 
-/* ===== Responsive ===== */
+
 @media(max-width:768px){
   .profile-header {
     flex-direction: column;

@@ -3,6 +3,8 @@ import api from "../api/axios.js"
 import Navbar from "../components/Navbar.jsx"
 import CreatePostCard from "../components/CreatePostCard.jsx"
 import FeedPostCard from "../components/FeedPostCard.jsx"
+import NavbarBottom from "../components/NavbarBottom.jsx"
+import "../styles/homepage.css"
 export default function Home() {
 	const [posts, setPosts] = useState([])
 	const [loading, setLoading] = useState(true)
@@ -25,7 +27,7 @@ export default function Home() {
     
 
     return(
-    <>
+    <div className="home-page">
       <Navbar />
       <CreatePostCard onPostCreated={fetchFeed}/>
 	  {loading && <p style={{ textAlign:"center" }}>Loading feed...</p>}
@@ -33,6 +35,8 @@ export default function Home() {
       {posts.map(post => (
         <FeedPostCard key={post._id} post={post}/>
 	))}
-    </>
+
+	<NavbarBottom />
+    </div>
     )
 }
