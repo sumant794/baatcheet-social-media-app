@@ -15,7 +15,7 @@
   .mobile-post-header {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
   }
 
   .mobile-post-avatar {
@@ -25,7 +25,8 @@
   }
 
   .mobile-post-username {
-    color:#1877f2;
+    font-size:18px;
+    color:#888;
     font-weight: 600;
   }
 

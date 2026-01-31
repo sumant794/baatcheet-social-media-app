@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar.jsx";
 import { useAuth } from "../context/useAuth.js";
+import { useNavigate } from "react-router-dom";
 import "../styles/profile.css"
 import api from "../api/axios.js";
+import NavbarBottom from "../components/NavbarBottom.jsx";
+import { FaPlus } from "react-icons/fa";
 
 export default function Profile() {
     const {user} = useAuth()
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(true)
+    const isMobile = window.innerWidth <= 480;
+    const navigate = useNavigate();
     //console.log("Profile", user)
     useEffect(() => {
         const fetchUserPosts = async () => {
@@ -29,38 +34,64 @@ export default function Profile() {
 
     return (
         <>
-            <Navbar />
-            
+            {!isMobile && <Navbar />}
             <div className="profile-container">
+
+                <div className="profile-nav">
+                    <div className="create-icon" onClick={() => navigate("/create-post")}><FaPlus /></div>
+                    <div><h2>{user.username || "username"}</h2></div>
+                </div>
 
                 <div className="profile-header">
 
-                <div className="profile-avatar">
-                    <img 
-                        src={user?.avatar || "/default-avatar.png"} 
-                        alt="avatar" 
-                    />
-                </div>
-
-                <div className="profile-info">
-                    <h2>{user?.fullName || "User"}</h2>
-                    <p className="username">@{user?.username || "username"}</p>
-
-                    <p className="bio">
-                        {user?.bio || "Hey 👋 I'm using Baatcheet"}
-                    </p>
-
-                    <div className="profile-stats">
-                        <span><b>0</b> Posts</span>
-                        <span><b>0</b> Followers</span>
-                        <span><b>0</b> Following</span>
+                    <div className="profile-avatar">
+                        <img 
+                            src={user?.avatar || "/default-avatar.png"} 
+                            alt="avatar" 
+                        />
                     </div>
 
+                    <div className="profile-info">
+                        <h2>@{user?.username || "username"}</h2>
+                        <p className="username">{user?.fullName || "User"}</p>
+
+                        <p className="bio">
+                            {user?.bio || "Hey 👋 I'm using Baatcheet"}
+                        </p>
+
+                        <div className="profile-stats">
+                            <span><b>{posts.length}</b> Posts</span>
+                            <span><b>{user.followers.length}</b> Followers</span>
+                            <span><b>{user.following.length}</b> Following</span>
+                        </div>
+
+
+                        <div className="profile-btns">
+                            <button className="edit-profile-btn">
+                                Edit Profile
+                            </button>
+
+                            <button className="edit-profile-btn">
+                                Delete Profile
+                            </button>
+                        </div>
+                        
+                    </div>
+
+                </div>
+
+                <p className="bio-mobile">
+                    {user?.bio || "Hey 👋 I'm using Baatcheet"}
+                </p>
+
+                <div className="mobile-profile-btns">
                     <button className="edit-profile-btn">
                         Edit Profile
                     </button>
-                </div>
-
+                    
+                    <button className="edit-profile-btn">
+                        Delete Profile
+                    </button>
                 </div>
 
                 <div className="profile-posts">
@@ -86,6 +117,8 @@ export default function Profile() {
                 </div>
 
             </div>
+
+            <NavbarBottom />
         </>
     )
 }

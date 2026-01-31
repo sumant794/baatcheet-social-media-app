@@ -1,9 +1,14 @@
 .profile-container {
+  background-color: white;
   max-width: 1000px;
-  margin: 20px auto;
+  height: 100vh;
+  margin: 0 auto;
   padding: 0 20px;
 }
 
+.profile-nav {
+    display: none;
+}
 
 .profile-header {
   display: flex;
@@ -24,6 +29,7 @@
 .profile-info h2 {
   margin: 0;
   font-size: 26px;
+  color: black;
 }
 
 .username {
@@ -34,16 +40,31 @@
 .bio {
   margin: 10px 0;
   font-size: 15px;
+  color: black;
+}
+
+.bio-mobile {
+    display: none;
 }
 
 .profile-stats {
   display: flex;
   gap: 20px;
   margin-top: 10px;
+  color:black;
 }
 
 .profile-stats span {
   font-size: 15px;
+}
+
+.profile-btns {
+    display: flex;
+    gap: 10px;
+}
+
+.mobile-profile-btns {
+    display: none;
 }
 
 .edit-profile-btn {
@@ -63,11 +84,18 @@
   margin-top: 30px;
 }
 
+
+
 .posts-grid {
   margin-top: 15px;
   display: grid;
+  background-color: white;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+}
+
+.posts-grid p{
+    color: black;
 }
 
 .post-placeholder {
@@ -101,7 +129,7 @@
 
 
 
-@media(max-width:768px){
+@media (min-width:481px) and (max-width:768px){
   .profile-header {
     flex-direction: column;
     text-align: center;
@@ -111,3 +139,75 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+@media (max-width:480px){
+    .profile-nav {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        gap: 50px;
+    }
+
+    .create-icon {
+        color:#1877f2;
+        font-size: 35px;
+    }
+    .profile-nav h2{
+        margin-top: -15px;
+        font-size: 35px;
+        color:#1877f2;
+    }
+    .profile-header {
+        border: none;
+        padding: 5px;
+        gap: 20px;
+    }
+    .profile-avatar img{
+        width: 80px;
+        height: 80px;
+        margin-bottom: -25px;
+    }
+
+    .profile-info h2{
+        display: none;
+    }
+
+    .username {
+        color: black;
+    }
+    .bio {
+        display:none;
+    }
+
+    .bio-mobile {
+        color: black;
+        display: block;
+        margin-left: 15px;
+        margin-top: 10px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .profile-btns {
+        display: none;
+    }
+
+    .mobile-profile-btns {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .edit-profile-btn {
+        padding: 8px 14px;
+        width: 150px;
+    }
+
+    .profile-posts h3 {
+        font-size: 22px;
+        font-weight: 500;
+        color: black;
+    }
+}
+
+

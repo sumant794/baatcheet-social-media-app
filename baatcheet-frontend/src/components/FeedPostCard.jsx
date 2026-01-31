@@ -24,7 +24,7 @@ export default function FeedPostCard({ post }) {
 
             <p className="feed-post-caption">
                 <strong>{post.owner.username}  </strong>
-                 {post.caption}
+                {post.caption}
             </p>
 
         </div>

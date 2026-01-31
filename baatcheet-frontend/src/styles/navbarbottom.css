@@ -7,13 +7,10 @@
     z-index: 100;
 }
 
-
-
-
-
-   
 @media (max-width: 480px){
     .navbar-bottom {
+        position: fixed;
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-between;

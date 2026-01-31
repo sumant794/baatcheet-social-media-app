@@ -34,7 +34,7 @@
 }
 
 .feed-post-header span {
-    color: #888;
+    color: black;
 }
 
 .feed-post-header button {
@@ -68,6 +68,7 @@
 }
 
 .feed-post-caption {
+    color: black;
   padding: 0 10px 10px;
   font-size: 14px;
 }
