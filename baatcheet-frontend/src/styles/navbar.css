@@ -35,6 +35,7 @@
 .left-section img {
     height: 45px;
     width: 45px;
+    object-fit: cover;
     border-radius: 40px;
 }
 

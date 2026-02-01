@@ -8,8 +8,13 @@ import { useAuth } from "./context/useAuth.js"
 import Profile from "./pages/Profile.jsx"
 import CreatePost from "./pages/CreatePost.jsx"
 import EditProfile from "./pages/EditProfile.jsx"
+import { useEffect } from "react"
 
 function App() {
+  useEffect(() => {
+  console.log("ENV:", import.meta.env.VITE_API_BASE_URL)
+}, [])
+
   const { loading } = useAuth()
   console.log(loading)
   if(loading) {
