@@ -1,0 +1,83 @@
+.edit-profile-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 16px;
+}
+
+.edit-profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit-profile-header button {
+    background: none;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.save-btn {
+    color: #1d9bf0;
+}
+
+.save-btn:disabled {
+    color: gray;
+    cursor: not-allowed;
+}
+
+.edit-profile-avatar {
+    text-align: center;
+    margin: 24px 0;
+}
+
+.edit-profile-avatar img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.change-photo {
+    display: block;
+    color: #1d9bf0;
+    margin-top: 8px;
+    cursor: pointer;
+}
+
+.edit-profile-form .form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+.edit-profile-textarea {
+    width: 100%;
+    height: 90px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+
+.char-count {
+    font-size: 12px;
+    color: gray;
+    float: right;
+}

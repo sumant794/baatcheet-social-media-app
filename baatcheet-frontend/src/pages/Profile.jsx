@@ -67,7 +67,7 @@ export default function Profile() {
 
 
                         <div className="profile-btns">
-                            <button className="edit-profile-btn">
+                            <button className="edit-profile-btn" onClick={() => navigate("/edit-profile")}>
                                 Edit Profile
                             </button>
 
@@ -85,7 +85,7 @@ export default function Profile() {
                 </p>
 
                 <div className="mobile-profile-btns">
-                    <button className="edit-profile-btn">
+                    <button className="edit-profile-btn" onClick={() => navigate("/edit-profile")}>
                         Edit Profile
                     </button>
                     

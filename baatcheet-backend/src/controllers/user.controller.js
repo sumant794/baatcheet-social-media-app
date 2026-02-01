@@ -274,20 +274,23 @@ const updateBio = asyncHandler(async(req, res) => {
 
 const updateAvatar = asyncHandler(async(req, res) => {
     const localFilePath = req.file?.path
-    
+    console.log("Update-avatar-hit")
+    console.log(req.file)
     if(!localFilePath){
         throw new ApiError(400, "Avatar file is missing")
     }
 
-    const deletedAvatar = await deleteFromCloudinary(req.user.avatar)
+    if(req.user.avatar) {
+        const deletedAvatar = await deleteFromCloudinary(req.user.avatar)
     
-    if(!deletedAvatar){
-        throw new ApiError(500, "Cloudinary delete error")
+        if(!deletedAvatar){
+            throw new ApiError(500, "Cloudinary delete error")
+        }
     }
- 
+
     const avatar = await uploadOnCloudinary(localFilePath)
     
-    if(!avatar.url){
+    if(!avatar?.url){
         throw new ApiError(500, "Something went wrong while uploading on cloudinary")
     }
 
@@ -301,7 +304,7 @@ const updateAvatar = asyncHandler(async(req, res) => {
         },
         { new: true } 
     ).select("-password -refreshToken")
-
+    console.log("Update-avatr:", user)
     return res
     .status(200)
     .json( new ApiResponse(200, user, "Avatar updated succesfully"))
