@@ -92,6 +92,7 @@ export default function CreatePostcard({ onPostCreated }){
                         disabled={loading}
                         className={loading ? "posting" : ""}
                     >
+                        {loading && <span className="spinner"></span>}
                         {loading ? "Posting..." : "Post"}
                     </button>
                 </div>
@@ -100,7 +101,14 @@ export default function CreatePostcard({ onPostCreated }){
 
             <div className="create-post-right">
                 {imagePreview ? (
-                    <img src={imagePreview} alt="preview" />
+                    <div className="preview-wrapper">
+                        <img src={imagePreview} alt="preview" />
+                        {loading && (
+                            <div className="preview-overlay">
+                                <span className="spinner"></span>
+                            </div>
+                        )}
+                    </div> 
                 ):(
                     <div className="image-placeholder">
                         Image Preview
