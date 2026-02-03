@@ -9,6 +9,7 @@ export default function CreatePostcard({ onPostCreated }){
     const [caption, setCaption] = useState("")
     const [image, setImage] = useState(null)
     const [imagePreview, setImagePreview] = useState(null)
+    const [loading, setLoading] = useState(false)
     const { user } = useAuth()
     console.log("CreatePostCard rendering with user:", user)
 
@@ -26,6 +27,7 @@ export default function CreatePostcard({ onPostCreated }){
             return
         }
         try {
+            setLoading(true)
             const formData = new FormData()
             formData.append("caption", caption)
             formData.append("image", image)
@@ -46,6 +48,8 @@ export default function CreatePostcard({ onPostCreated }){
         } catch (error) {
             console.log(error)
             alert(error.response?.data?.message || "Post upload failed")
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -83,7 +87,13 @@ export default function CreatePostcard({ onPostCreated }){
                             onChange={handleImageChange}
                         />
                     </label>
-                    <button onClick={handlePost}>Post</button>
+                    <button 
+                        onClick={handlePost}
+                        disabled={loading}
+                        className={loading ? "posting" : ""}
+                    >
+                        {loading ? "Posting..." : "Post"}
+                    </button>
                 </div>
 
             </div>
