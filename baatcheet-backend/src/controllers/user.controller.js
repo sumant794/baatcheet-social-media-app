@@ -92,8 +92,7 @@ const loginUser = asyncHandler(async(req, res) => {
     
     const options = {
         httpOnly: true,
-        secure: true,        // 🔥 HTTPS mandatory
-        sameSite: "none"     // 🔥 cross-site allow
+        secure: false
     };
 
 

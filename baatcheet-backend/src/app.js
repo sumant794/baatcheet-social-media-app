@@ -4,34 +4,15 @@ import cookieParser from "cookie-parser"
 
 const app = express()
 
-app.use((req, res, next) => {
-  console.log("BACKEND HIT:", req.method, req.url);
-  console.log("Cookies:", req.cookies);
-  next();
-});
-
-
-const allowedOrigins = [
-"http://localhost:5173",
-"http://10.179.197.252:5173"
-];
-
 app.use(
-cors({
-origin: function (origin, callback) {
-// Postman / mobile app / server-to-server
-if (!origin) return callback(null, true);
-
-if (allowedOrigins.includes(origin)) {
-  callback(null, true);
-} else {
-  callback(new Error("Not allowed by CORS"));
-}
-},
-credentials: true
-})
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://10.179.197.252:5173"
+    ],
+    credentials: true
+  })
 );
-
 
 app.use(express.json({limit: "16kb"}))
 app.use(express.urlencoded({ extended: true, limit: "16kb" }))
