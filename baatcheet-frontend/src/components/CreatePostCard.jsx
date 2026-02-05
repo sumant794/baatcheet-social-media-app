@@ -3,6 +3,7 @@ import { FaImage } from "react-icons/fa"
 import "../styles/createpostcard.css"
 import api from "../api/axios.js"
 import { useAuth } from "../context/useAuth.js"
+import { useToast } from "../context/useToast.js"
 
 
 export default function CreatePostcard({ onPostCreated }){
@@ -11,6 +12,7 @@ export default function CreatePostcard({ onPostCreated }){
     const [imagePreview, setImagePreview] = useState(null)
     const [loading, setLoading] = useState(false)
     const { user } = useAuth()
+    const { showToast } = useToast()
     console.log("CreatePostCard rendering with user:", user)
 
     const handleImageChange = (e) => {
@@ -23,7 +25,7 @@ export default function CreatePostcard({ onPostCreated }){
 
     const handlePost = async () => {
         if(!caption.trim() || !image){
-            alert("Image and caption is required")
+            showToast("Image and caption is required", "error")
             return
         }
         try {
@@ -44,10 +46,15 @@ export default function CreatePostcard({ onPostCreated }){
             setImage(null)
             setImagePreview(null)
             onPostCreated()
-            alert("Post uploaded successfully ✅")
+            showToast("Post uploaded successfully ✅", "success")
+
         } catch (error) {
             console.log(error)
-            alert(error.response?.data?.message || "Post upload failed")
+            showToast(
+                error.response?.data?.message || "Post upload failed",
+                "error"
+            )
+
         } finally {
             setLoading(false)
         }

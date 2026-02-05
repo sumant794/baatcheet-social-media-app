@@ -5,7 +5,7 @@ import Register from "./pages/Register.jsx"
 import Home from "./pages/Home.jsx"
 import './App.css'
 import { useAuth } from "./context/useAuth.js"
-import { ToastProvider } from "./context/ToastContext.jsx"
+import { ToastProvider } from "./context/ToastProvider.jsx"
 import Profile from "./pages/Profile.jsx"
 import CreatePost from "./pages/CreatePost.jsx"
 import EditProfile from "./pages/EditProfile.jsx"
