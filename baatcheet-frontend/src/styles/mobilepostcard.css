@@ -101,4 +101,27 @@
     font-weight: bold;
     transition: all 0.3s ease;
   }
+
+  .mobile-post-actions button.posting{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0.7;
+  }
+
+  .spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(24,119,242,0.3);
+    border-top: 2px solid #1877f2;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+  }
 }

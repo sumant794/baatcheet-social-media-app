@@ -9,6 +9,7 @@ export default function MobilePostcard({ onPostCreated }) {
   const [caption, setCaption] = useState("")
   const [image, setImage] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
+  const [loading, setLoading] = useState(false)
   const { user } = useAuth()
   const { showToast } = useToast()
 
@@ -27,6 +28,7 @@ export default function MobilePostcard({ onPostCreated }) {
     }
 
     try {
+      setLoading(true)
       const formData = new FormData()
       formData.append("caption", caption)
       formData.append("image", image)
@@ -42,6 +44,8 @@ export default function MobilePostcard({ onPostCreated }) {
         error.response?.data?.message || "Post upload failed",
         "error"
       )
+    }finally{
+      setLoading(false)
     }
   }
 
@@ -92,7 +96,14 @@ export default function MobilePostcard({ onPostCreated }) {
           />
         </label>
 
-        <button onClick={handlePost}>Post</button>
+        <button 
+          onClick={handlePost}
+          disabled={loading}
+          className={loading ? "posting": ""}
+        >
+          {loading && <span className="spinner"></span>}
+          {loading ? "Posting..." : "Post"}
+        </button>
       </div>
 
     </div>
