@@ -36,9 +36,12 @@ export default function MobilePostcard({ onPostCreated }) {
       setImage(null)
       setImagePreview(null)
       onPostCreated?.()
-      alert("Post uploaded successfully ✅")
-    } catch (err) {
-      alert("Post upload failed")
+      showToast("Post uploaded successfully ✅", "success")
+    } catch (error) {
+      showToast(
+        error.response?.data?.message || "Post upload failed",
+        "error"
+      )
     }
   }
 
