@@ -11,6 +11,7 @@ export default function CreatePostcard({ onPostCreated }){
     const [image, setImage] = useState(null)
     const [imagePreview, setImagePreview] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [postSuccess, setPostSuccess] = useState(false)
     const { user } = useAuth()
     const { showToast } = useToast()
     console.log("CreatePostCard rendering with user:", user)
@@ -42,11 +43,16 @@ export default function CreatePostcard({ onPostCreated }){
             console.log(response)
             console.log("Post Created:", response.data)
 
-            setCaption("")
-            setImage(null)
-            setImagePreview(null)
-            onPostCreated()
+            setPostSuccess(true)
             showToast("Post uploaded successfully ✅", "success")
+
+            setTimeout(() => {
+                setCaption("")
+                setImage(null)
+                setImagePreview(null)
+                setPostSuccess(false)
+                onPostCreated()
+            }, 2000)
 
         } catch (error) {
             console.log(error)
@@ -115,6 +121,14 @@ export default function CreatePostcard({ onPostCreated }){
                                 <span className="spinner"></span>
                             </div>
                         )}
+
+                        {postSuccess && (
+                            <div className="success-overlay">
+                                <div className="tick">✔</div>
+                                <p>Post Successful</p>
+                            </div>
+                        )}
+
                     </div> 
                 ):(
                     <div className="image-placeholder">

@@ -3,12 +3,14 @@ import { FaImage } from "react-icons/fa"
 import "../styles/mobilepostcard.css"
 import api from "../api/axios.js"
 import { useAuth } from "../context/useAuth.js"
+import { useToast } from "../context/useToast.js"
 
 export default function MobilePostcard({ onPostCreated }) {
   const [caption, setCaption] = useState("")
   const [image, setImage] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const { user } = useAuth()
+  const { showToast } = useToast()
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]
@@ -20,7 +22,7 @@ export default function MobilePostcard({ onPostCreated }) {
 
   const handlePost = async () => {
     if (!caption.trim() || !image) {
-      alert("Image and caption is required")
+      showToast("Image and caption is required", "error")
       return
     }
 
