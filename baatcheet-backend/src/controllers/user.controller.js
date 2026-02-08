@@ -429,13 +429,15 @@ const searchUsers = asyncHandler(async (req, res) => {
     }
 
     const users = await User.find({
-        username:{ $regex: query, $options:"i" }
+        _id: {$ne: req.user._id},
+        $or: [
+            { username:{ $regex: query, $options:"i" } },
+            { fullName:{ $regex: query, $options:"i" } },
+        ]
     })
     .select("username avatar fullName")
     .limit(10)
     
-    //validate users
-
     return res
     .status(200)
     .json(
