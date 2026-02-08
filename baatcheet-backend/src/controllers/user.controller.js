@@ -460,15 +460,22 @@ const getUserProfile = asyncHandler(async(req, res) => {
     }
 
     const isFollowing = user.followers.some(
-        (follower) => follower._id.toString() === userId.toString()
+        (follower) => follower._id.toString() === req.user._id.toString()
     )
     
     return res
     .status(200)
     .json(
-        new ApiResponse(200, { user, isFollowing}, "User Profile Fetched Successfully")
-    )
-
+        new ApiResponse(
+            200, 
+            { 
+                user, 
+                isFollowing,
+                followersCount: user.followers.length,
+                followingCount: user.following.legth
+            }, 
+            "User Profile Fetched Successfully")
+        )
 })
 
 
