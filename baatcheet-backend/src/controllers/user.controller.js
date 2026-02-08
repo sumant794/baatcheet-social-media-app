@@ -344,27 +344,30 @@ const removeAvatar = asyncHandler(async(req, res) => {
 
 const toggleFollow = asyncHandler(async (req, res) => {
     const { accountId } = req.params
-    
     const userId = req.user._id
 
     if (!mongoose.isValidObjectId(accountId)) {
-    throw new ApiError(400, "Invalid account id")
+        throw new ApiError(400, "Invalid account id")
     }
 
     if (accountId.toString() === userId.toString()) {
-    throw new ApiError(400, "You cannot follow yourself")
+        throw new ApiError(400, "You cannot follow yourself")
     }
 
     const account = await User.findById(accountId)
    
     if (!account) {
-    throw new ApiError(404, "Account not found")
+        throw new ApiError(404, "Account not found")
     }
 
     const isFollowing = account.followers.includes(userId)
+
+    let updatedAccount
+    let updatedUser
+    let newFollowState
     
     if (!isFollowing) {
-        const account = await User.findByIdAndUpdate(
+        updatedAccount = await User.findByIdAndUpdate(
             accountId,
             {
                 $addToSet: { followers: userId }  
@@ -372,7 +375,7 @@ const toggleFollow = asyncHandler(async (req, res) => {
             { new:true }
         )
         
-        const user = await User.findByIdAndUpdate(
+        updatedUser = await User.findByIdAndUpdate(
             userId, 
             {
                 $addToSet: { following: accountId }
@@ -380,12 +383,10 @@ const toggleFollow = asyncHandler(async (req, res) => {
             { new:true }
         )
         
-        return res.status(200).json(
-        new ApiResponse(200, {account, user}, "Followed successfully")
-        )
+        newFollowState = true
     } 
     else {
-        const account = await User.findByIdAndUpdate(
+        updatedAccount = await User.findByIdAndUpdate(
             accountId, 
             {
                 $pull: { followers: userId }
@@ -393,7 +394,7 @@ const toggleFollow = asyncHandler(async (req, res) => {
             { new:true }
         )
 
-        const user = await User.findByIdAndUpdate(
+        const updatedUser = await User.findByIdAndUpdate(
             userId, 
             {
                 $pull: { following: accountId }
@@ -401,10 +402,20 @@ const toggleFollow = asyncHandler(async (req, res) => {
             { new:true }
         )
 
-        return res.status(200).json(
-        new ApiResponse(200, {account, user}, "Unfollowed successfully")
-        )
+        newFollowState = false
     }
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {
+                isFollowing: newFollowState,
+                followersCount: updatedAccount.followers.length,
+                followingCount: updatedUser.following.length
+            },
+            newFollowState ? "Followed succesfully" : "Unfollowed Succesfully"
+        )
+    )
 })
 
 const searchUsers = asyncHandler(async (req, res) => {

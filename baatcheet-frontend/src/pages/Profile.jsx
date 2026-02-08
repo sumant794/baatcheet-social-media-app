@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar.jsx";
 import { useAuth } from "../context/useAuth.js";
 import { useNavigate } from "react-router-dom";
-import "../styles/profile.css"
+import "../styles/profile.css";
 import api from "../api/axios.js";
 import NavbarBottom from "../components/NavbarBottom.jsx";
 import { FaPlus } from "react-icons/fa";
