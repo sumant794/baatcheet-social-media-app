@@ -9,6 +9,7 @@ import { ToastProvider } from "./context/ToastProvider.jsx"
 import Profile from "./pages/Profile.jsx"
 import CreatePost from "./pages/CreatePost.jsx"
 import EditProfile from "./pages/EditProfile.jsx"
+import PublicProfile from "./pages/PublicProfile.jsx"
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/edit-profile" element={<EditProfile />} />
+        <Route path="/profile/:userId" element={<PublicProfile />} />
       </Routes>
     </ToastProvider>
   )

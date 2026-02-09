@@ -35,6 +35,7 @@ export default function Navbar(){
 
             const res = await api.get(`users/search?query=${query}`)
             setResults(res.data.data)
+            console.log("Results for you search: ", results)
         } catch (error) {
             console.log(error)
         } finally {
@@ -82,6 +83,7 @@ export default function Navbar(){
                                 key={user._id}
                                 className="search-item"
                                 onClick={() => {
+                                    if(!user?._id) return
                                     navigate(`/profile/${user._id}`)
                                     setQuery("")
                                     setResults([])
@@ -90,7 +92,7 @@ export default function Navbar(){
                                 <img
                                     src={
                                         user.avatar ||
-                                        "/deafult-avatar.png"
+                                        "/default-avatar.png"
                                     }
                                 />
 
