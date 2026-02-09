@@ -3,11 +3,45 @@ import "../styles/navbar.css"
 import { FaSearch, FaHome, FaUser, FaPlus, FaPowerOff, FaRegCommentDots } from "react-icons/fa"
 import { useAuth } from "../context/useAuth.js"
 import { useNavigate } from "react-router-dom";
+import api from "../api/axios.js"
+import { useState, useEffect } from "react";
 
 export default function Navbar(){
     const { user } = useAuth()
     const navigate = useNavigate()
+
+    const [query, setQuery] = useState("")
+    const [results, setResults] = useState([])
+    const [loading, setLoading] = useState(false)
     console.log("Navbar rendering with user:", user)
+
+    useEffect(() => {
+        const delay = setTimeout(() => {
+            if(!query.trim()) {
+                setResults([])
+                return
+            }
+
+            fetchUsers()
+        }, 400)
+
+        return () => clearTimeout(delay)
+
+    }, [query])
+
+    const fetchUsers = async () => {
+        try {
+            setLoading(true)
+
+            const res = await api.get(`users/search?query=${query}`)
+            setResults(res.data.data)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return(
         <nav className="navbar">
         
@@ -22,7 +56,54 @@ export default function Navbar(){
 
             <div className="middle-section">
                 <FaSearch className="search-icon" />
-                <input type="text" placeholder="Search users..."/>
+                <input 
+                    type="text" 
+                    placeholder="Search users..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                />
+
+                {query && (
+                    <div className="search-dropdown">
+                        {loading && (
+                            <p className="search-status">
+                                Searching...
+                            </p>
+                        )}
+
+                        {!loading && results.length === 0 && (
+                            <p className="search-status">
+                                No users found
+                            </p>
+                        )}
+
+                        {results.map(user => (
+                            <div
+                                key={user._id}
+                                className="search-item"
+                                onClick={() => {
+                                    navigate(`/profile/${user._id}`)
+                                    setQuery("")
+                                    setResults([])
+                                }}
+                            >
+                                <img
+                                    src={
+                                        user.avatar ||
+                                        "/deafult-avatar.png"
+                                    }
+                                />
+
+                                <div>
+                                    <p>{user.fullName}</p>
+                                    <span>@{user.username}</span>
+                                </div>
+                            </div>
+                        ))}
+
+                    </div>
+                )}
+
             </div>
 
             <div className="right-section"> 
