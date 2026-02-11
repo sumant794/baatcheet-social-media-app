@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import api from "../api/axios.js";
 import { useEffect } from "react";
 import "../styles/publicprofile.css"
-import Navbar from "../components/Navbar.jsx";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function PublicProfile(){
     const { userId } = useParams()
@@ -25,13 +25,13 @@ export default function PublicProfile(){
     const fetchPosts = async () => {
         const res = await api.get(`/post/user/${userId}`)
         console.log("Public-Profile Posts: ",res)
-        setPosts(res.data.dat)
+        setPosts(res.data.data)
         setLoading(false)
     }
 
     useEffect(() => {
         fetchProfile()
-        fetchPosts()
+        fetchPosts() 
     }, [userId])
 
     const handleFollow = async () => {
@@ -48,129 +48,61 @@ export default function PublicProfile(){
     }
 
     return (
-        <div className="profile-page">
+        <div className="public-profile-page">
+            {user && (
+                <div className="public-profile-container">
 
-        {/* Navbar */}
-        <Navbar />
+                    <div className="arrow-and-username">
+                        <span>
+                            <Link to="/home">
+                                <FaArrowLeft />
+                            </Link>
+                        </span>
+                        <h2>{user.username}</h2>
+                    </div>
 
-        {/* ================= PROFILE HEADER ================= */}
-        <div className="profile-header">
+                    <div className="image-fullname-stats">
 
-            {/* Top Section */}
-            <div className="profile-top">
+                        <div className="img">
+                            <img 
+                                src={user.avatar}
+                                alt=""
+                            />
+                        </div>
 
-            {/* Avatar */}
-            <div className="profile-avatar">
-                <img
-                src={
-                    user.avatar ||
-                    "/default-avatar.png"
-                }
-                alt=""
-                />
-            </div>
+                        <div className="fullname-stats">
 
-            {/* Stats */}
-            <div className="profile-stats">
+                            <div className="fullname">
+                                {user.fullName}
+                            </div>
 
-                <div>
-                <h3>{posts.length}</h3>
-                <span>Posts</span>
+                            <div className="stats">
+                                <div>
+                                    <h3>{posts.length}</h3>
+                                    <span>Posts</span>
+                                </div>
+
+                                <div>
+                                    <h3>{user.followers.length}</h3>
+                                    <span>Followers</span>
+                                </div>
+
+                                <div>
+                                    <h3>{user.following.length}</h3>
+                                    <span>Following</span>
+                                </div>
+                                
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div className="Bio">{user.bio}</div>
                 </div>
-
-                <div>
-                <h3>{user.followers.length}</h3>
-                <span>Followers</span>
-                </div>
-
-                <div>
-                <h3>{user.following.length}</h3>
-                <span>Following</span>
-                </div>
-
-            </div>
-
-            </div>
-
-            {/* Name + Bio */}
-            <div className="profile-info">
-
-            <h2>{user.fullName}</h2>
-
-            <p className="username">
-                @{user.username}
-            </p>
-
-            {user.bio && (
-                <p className="bio">
-                {user.bio}
-                </p>
+                
             )}
 
-            </div>
-
-            {/* Action Buttons */}
-            <div className="profile-actions">
-
-            <button
-                className="follow-btn"
-                onClick={handleFollow}
-            >
-                {isFollowing
-                ? "Following"
-                : "Follow"}
-            </button>
-
-            <button className="message-btn">
-                Message
-            </button>
-
-            </div>
-
         </div>
-
-        {/* ================= STORY HIGHLIGHTS ================= */}
-
-        <div className="profile-highlights">
-
-            <div className="highlight">
-            <div className="circle"></div>
-            <span>Highlight</span>
-            </div>
-
-            <div className="highlight">
-            <div className="circle"></div>
-            <span>Trips</span>
-            </div>
-
-            <div className="highlight">
-            <div className="circle"></div>
-            <span>Friends</span>
-            </div>
-
-        </div>
-
-        {/* ================= POSTS GRID ================= */}
-
-        <div className="profile-posts">
-
-            {posts.map(post => (
-
-            <div
-                key={post._id}
-                className="post-card"
-            >
-                <img
-                src={post.image}
-                alt=""
-                />
-            </div>
-
-            ))}
-
-        </div>
-
-        </div>
-
     )
 }
