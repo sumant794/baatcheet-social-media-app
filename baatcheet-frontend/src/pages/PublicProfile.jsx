@@ -98,7 +98,41 @@ export default function PublicProfile(){
 
                     </div>
 
-                    <div className="Bio">{user.bio}</div>
+                    <div className="Bio">
+                        {user.bio}
+                    </div>
+
+                    <div className="public-profile-actions">
+                        <button
+                            onClick={handleFollow}
+                        >
+                            {isFollowing 
+                                ? "Following"  
+                                : "Follow"
+                            }
+                        </button>
+                        <button>Message</button>
+                    </div>
+
+                    <h3>Posts By {user.fullName}</h3>
+
+                    <div className="public-profile-posts">
+
+                        {posts.map(post => (
+
+                            <div
+                                key={post._id}
+                                className="post-card"
+                            >
+                                <img
+                                src={post.image}
+                                alt=""
+                                />
+                            </div>
+
+                        ))}
+                    </div>
+
                 </div>
                 
             )}
