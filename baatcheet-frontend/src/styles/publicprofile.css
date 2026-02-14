@@ -89,3 +89,9 @@ h3 {
   object-fit: cover;
 }
 
+@media (max-width: 480px) {
+    .public-profile-page{
+        background-color: #0362dd;
+    }
+}
+

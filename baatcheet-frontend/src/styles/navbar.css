@@ -200,6 +200,16 @@
         color: black;
     }
 
+    .search-dropdown {
+        top: 80px;
+        left: -60px;
+        width: 340px;
+    }
+
+    .search-item p {
+        color: rgb(80, 79, 79);
+    }
+
     .right-section {
         padding:10px;
     }
