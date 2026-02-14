@@ -99,7 +99,7 @@ export default function PublicProfile(){
                     </div>
 
                     <div className="Bio">
-                        {user.bio}
+                        {user.bio || "Hey 👋 I'm using Baatcheet"}
                     </div>
 
                     <div className="public-profile-actions">

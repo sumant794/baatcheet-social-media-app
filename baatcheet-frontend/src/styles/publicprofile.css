@@ -21,6 +21,7 @@
 .arrow-and-username h2 {
     margin-top: -10px;
     font-size: 30px;
+    color: black;
 }
 
 .image-fullname-stats {
@@ -48,6 +49,7 @@
 
 .Bio {
     margin-top: 10px;
+    color: black;
 }
 
 .public-profile-actions {
@@ -55,7 +57,7 @@
     gap: 20px;
     margin-top: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #dbdbdb;
+    border-bottom: 1px solid #cac9c9;
 }
 
 .public-profile-actions button {
@@ -74,6 +76,7 @@
 }
 
 h3 {
+    color: black;
     margin: 10px;
 }
 
@@ -91,7 +94,64 @@ h3 {
 
 @media (max-width: 480px) {
     .public-profile-page{
-        background-color: #0362dd;
+        padding: 10px;
+    }
+
+    .arrow-and-username {
+        gap: 30px;
+    }
+
+    .arrow-and-username span {
+        font-size: 25px;
+    }
+
+    .image-fullname-stats img {
+        height: 90px;
+        width: 90px;
+    }
+
+    .fullname {
+        font-size: 20px;
+        color: black;
+        margin-bottom: -10px;
+    }
+
+    .stats {
+        color: black;
+    }
+
+    .stats div {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .stats div h3{
+        margin-left: 0px
+    }
+
+    .stats div span {
+        margin-top: -10px;
+    }
+
+    .Bio {
+        color: black;
+    }
+
+    .public-profile-actions {
+        margin-top: 10px;
+    }
+
+    .public-profile-actions button {
+        flex: 1;
+    }
+
+    .public-profile-posts {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .post-card img {
+        height: 100px;
     }
 }
 
