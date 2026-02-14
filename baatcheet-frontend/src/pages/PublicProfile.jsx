@@ -22,7 +22,7 @@ export default function PublicProfile(){
         setIsFollowing(res.data.data.isFollowing)
     }
 
-    const fetchPosts = async () => {
+    const fetchPosts = async () => {k
         const res = await api.get(`/post/user/${userId}`)
         console.log("Public-Profile Posts: ",res)
         setPosts(res.data.data)
@@ -31,14 +31,13 @@ export default function PublicProfile(){
 
     useEffect(() => {
         fetchProfile()
-        fetchPosts() 
+        fetchPosts()    
     }, [userId])
 
     const handleFollow = async () => {
         const res = await api.post(`/users/f/${userId}`)
-
+        console.log("handlefollow: ",res)
         setIsFollowing(res.data.data.isFollowing)
-
         setUser(prev => ({
             ...prev,
             followers: res.data.data.isFollowing
