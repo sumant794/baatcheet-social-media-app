@@ -394,7 +394,7 @@ const toggleFollow = asyncHandler(async (req, res) => {
             { new:true }
         )
 
-        const updatedUser = await User.findByIdAndUpdate(
+        updatedUser = await User.findByIdAndUpdate(
             userId, 
             {
                 $pull: { following: accountId }

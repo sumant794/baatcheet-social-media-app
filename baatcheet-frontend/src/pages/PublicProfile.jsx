@@ -22,7 +22,7 @@ export default function PublicProfile(){
         setIsFollowing(res.data.data.isFollowing)
     }
 
-    const fetchPosts = async () => {k
+    const fetchPosts = async () => {
         const res = await api.get(`/post/user/${userId}`)
         console.log("Public-Profile Posts: ",res)
         setPosts(res.data.data)
