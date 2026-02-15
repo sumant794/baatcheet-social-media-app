@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios.js";
 import { useEffect } from "react";
 import "../styles/publicprofile.css"
@@ -7,6 +7,7 @@ import { FaArrowLeft } from "react-icons/fa";
 
 export default function PublicProfile(){
     const { userId } = useParams()
+    const navigate = useNavigate()
     console.log("User Id: ",userId)
 
     const [user, setUser] = useState(null)
@@ -117,11 +118,14 @@ export default function PublicProfile(){
 
                     <div className="public-profile-posts">
 
-                        {posts.map(post => (
+                        {posts.map((post, index) => (
 
                             <div
                                 key={post._id}
                                 className="post-card"
+                                onClick={
+                                    () => navigate(`/profile/${userId}/posts/${index}`)
+                                }
                             >
                                 <img
                                 src={post.image}

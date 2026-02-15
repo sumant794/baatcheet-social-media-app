@@ -10,6 +10,8 @@ import Profile from "./pages/Profile.jsx"
 import CreatePost from "./pages/CreatePost.jsx"
 import EditProfile from "./pages/EditProfile.jsx"
 import PublicProfile from "./pages/PublicProfile.jsx"
+import PostFeed from "./pages/PostFeed.jsx";
+
 
 function App() {
 
@@ -29,6 +31,7 @@ function App() {
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/profile/:userId" element={<PublicProfile />} />
+        <Route path="/profile/:userId/posts/:index" element={<PostFeed />} />
       </Routes>
     </ToastProvider>
   )
