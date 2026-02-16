@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import api from "../api/axios.js";
 import "../styles/postfeed.css";
 import Navbar from "../components/Navbar.jsx";
 import FeedPostCard from "../components/FeedPostCard";
-import { FaRegHeart, FaRegCommentDots, FaShare } from "react-icons/fa"
+import { FaRegHeart, FaRegCommentDots, FaShare, FaArrowLeft } from "react-icons/fa"
 
 export default function PostFeed() {
 
@@ -50,6 +50,14 @@ export default function PostFeed() {
         <div className="feed-page">
             {!isMobile && <Navbar /> }
             
+            <div className="arrow-and-title">
+                <span>
+                    <Link to="/home">
+                        <FaArrowLeft />
+                    </Link>
+                </span>
+                <h2>Posts</h2>
+            </div>
 
             {posts.map((post, i) => {
                 return (

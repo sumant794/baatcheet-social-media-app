@@ -1,3 +1,50 @@
 .feed-page {
    background-color: white;
+   position: relative;
+}
+
+.arrow-and-title {
+   display: flex;
+   align-items: center;
+   gap: 37px;
+   color: #1877f2;
+   margin-left: 15px;
+   margin-top: 15px;
+}
+
+.arrow-and-title span {
+   font-size: 30px;
+}
+
+.arrow-and-title a {
+  color: #1877f2;
+}
+
+.arrow-and-title h2 {
+    margin-top: -10px;
+    font-size: 30px;
+    color: black;
+}
+
+
+@media (max-width: 480px){
+   .feed-post-card {
+      margin-top: 0px;
+   }
+
+   .arrow-and-title {
+      margin-top: 0px;
+      margin-left: 0px;
+      gap: 20px;
+      padding: 10px;
+   }
+
+   .arrow-and-title span {
+      font-size: 25px;
+   }
+
+   .arrow-and-title h2 {
+      color: #1877f2;
+      font-size: 25px;
+   }
 }
