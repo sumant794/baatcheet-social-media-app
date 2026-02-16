@@ -5,10 +5,11 @@ import CreatePostCard from "../components/CreatePostCard.jsx"
 import FeedPostCard from "../components/FeedPostCard.jsx"
 import NavbarBottom from "../components/NavbarBottom.jsx"
 import "../styles/homepage.css"
+
 export default function Home() {
 	const [posts, setPosts] = useState([])
 	const [loading, setLoading] = useState(true)
-
+	
 	const fetchFeed = async () => {
 		try {
 			const response = await api.get("/post/f/feed")
@@ -18,12 +19,13 @@ export default function Home() {
 			console.log(error)
 			setLoading(false)
 		}
-  }
+  	}
 
-  useEffect(() => {
-    fetchFeed()
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+
+	useEffect(() => {
+		fetchFeed()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
     
 
     return(

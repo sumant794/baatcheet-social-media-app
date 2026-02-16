@@ -126,20 +126,30 @@ const getFeed = asyncHandler(async(req, res) =>{
         throw new ApiError(404, "User not found")
     }
 
-    const followingIds = user.following
+    //const followingIds = user.following
+    const followingIds = [...user.following, req.user._id]
 
     followingIds.push(req.user._id)
     
     const feedPosts = await Post.find({
         owner: { $in: followingIds }
     })
-    .populate("owner", "username fullName avatar")
+    .populate("owner", "username fullName avatar followers")
     .sort({ createdAt: -1 })
-    console.log(feedPosts)
+    //console.log(feedPosts)
+
+    const postsWithFollowState = feedPosts.map(post => {
+        const isFollowing = post.owner.followers.includes(req.user._id)
+        return {
+            ...post.toObject(),
+            isFollowing
+        }
+    })
+
     return res
     .status(200)
     .json(
-        new ApiResponse(200, feedPosts, "Feedposts fetched successfully")
+        new ApiResponse(200, postsWithFollowState, "Feedposts fetched successfully")
     )
 
 })

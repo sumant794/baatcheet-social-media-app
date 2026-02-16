@@ -12,7 +12,6 @@ export default function PublicProfile(){
 
     const [user, setUser] = useState(null)
     const [posts, setPosts] = useState([])
-    const [isFollowing, setIsFollowing] = useState(false)
     const [loading, setLoading] = useState(true)
 
     const fetchProfile = async () => {
