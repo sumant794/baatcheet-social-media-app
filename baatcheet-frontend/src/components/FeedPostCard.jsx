@@ -1,17 +1,24 @@
+import { useEffect, useState } from "react";
 import api from "../api/axios";
-import "../styles/feedpost.css"
 import { FaRegHeart, FaRegCommentDots, FaShare } from "react-icons/fa"
 import { useAuth } from "../context/useAuth.js"
-import { useState } from "react";
+import "../styles/feedpost.css"
+import { instaTimeAgo } from "../utils/timeAgo.js";
 
-export default function FeedPostCard({ post }) {
+
+export default function FeedPostCard({ post, onFollow }) {
     const { user } = useAuth();
-    const [isFollowing, setIsFollowing] = useState(null)
+    const [isFollowing, setIsFollowing] = useState(post.isFollowing)
     console.log("Sumant", post)
+
+    useEffect(() => {
+        setIsFollowing(post.isFollowing)
+    }, [post.isFollowing])
 
     const handleFollow = async () => {
         const res = await api.post(`/users/f/${post.owner._id}`)
         setIsFollowing(res.data.data.isFollowing)
+        onFollow()
         console.log("Resposne from follow btn in feedpost: ", res) 
     }
 
@@ -44,6 +51,10 @@ export default function FeedPostCard({ post }) {
             <p className="feed-post-caption">
                 <strong>{post.owner.username}  </strong>
                 {post.caption}
+            </p>
+
+            <p className="time">
+                {instaTimeAgo(post.createdAt)}
             </p>
 
         </div>

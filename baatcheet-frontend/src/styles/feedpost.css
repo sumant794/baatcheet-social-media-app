@@ -74,6 +74,13 @@
   font-size: 14px;
 }
 
+.time {
+  font-size: 12px;
+  color: gray;
+  margin-left: 6px;
+}
+
+
 @media(max-width:480px){
     .feed-post-card {
         margin-left:0;

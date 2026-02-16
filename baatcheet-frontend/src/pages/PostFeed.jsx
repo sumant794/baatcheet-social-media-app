@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import api from "../api/axios.js";
 import "../styles/postfeed.css";
 import Navbar from "../components/Navbar.jsx";
-import FeedPostCard from "../components/FeedPostCard";
+import { instaTimeAgo } from "../utils/timeAgo.js";
 import { FaRegHeart, FaRegCommentDots, FaShare, FaArrowLeft } from "react-icons/fa"
 
 export default function PostFeed() {
@@ -82,6 +82,10 @@ export default function PostFeed() {
                         <p className="feed-post-caption">
                             <strong>{post.owner.username}  </strong>
                             {post.caption}
+                        </p>
+
+                        <p className="time">
+                            {instaTimeAgo(post.createdAt)}
                         </p>
 
                     </div>

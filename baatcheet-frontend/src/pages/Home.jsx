@@ -13,6 +13,7 @@ export default function Home() {
 	const fetchFeed = async () => {
 		try {
 			const response = await api.get("/post/f/feed")
+			console.log("Feed from home: ", response)
 			setPosts(response.data.data)
 			setLoading(false)
 		} catch (error) {
@@ -37,7 +38,7 @@ export default function Home() {
 	  {loading && <p style={{ textAlign:"center" }}>Loading feed...</p>}
 
       {posts.map(post => (
-        <FeedPostCard key={post._id} post={post}/>
+        <FeedPostCard key={post._id} post={post} onFollow={fetchFeed}/>
 	))}
 
 	<NavbarBottom />
