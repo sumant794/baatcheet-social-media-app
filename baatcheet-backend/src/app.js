@@ -26,6 +26,7 @@ import postRouter from "./routes/post.routes.js"
 //routes declaration
 app.use("/api/v1/users", userRouter) //http://localhost:8000/api/v1/users/register
 app.use("/api/v1/post", postRouter)
+app.use("/api/v1/chat", chatRouter)
 
 
 app.use((err, req, res, next) => {
