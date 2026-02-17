@@ -30,6 +30,8 @@ const messageSchema = new Schema(
         seenAt: {
             type: Date,
         }
-}, { timestamps: true})
+    }, 
+    { timestamps: true}
+)
 
 export const Message = mongoose.model("Message", messageSchema);
