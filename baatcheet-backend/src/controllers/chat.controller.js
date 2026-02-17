@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Conversation } from "../models/conversation.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -46,6 +47,25 @@ const createConversation = asyncHandler(async(req, res) => {
 
 })
 
+const getUserConversations = asyncHandler(async (req, res) => {
+    const userId = req.user?._id
+
+    if(!mongoose.isValidObjectId(userId)){
+        throw new ApiError(400, "Innvalid User Id")
+    }
+
+    const conversations = await Conversation.find({
+        members: userId
+    })
+    .populate("members", "username fullName avatar")
+    .sort({ lastMessageAt: -1, updatedAt: -1})
+
+    return res.status(200).json(
+        new ApiResponse(200, conversations, "Conversations fetched Successfully")
+    )
+})
+
 export {
-    createConversation
+    createConversation,
+    getUserConversations
 }
