@@ -11,6 +11,7 @@ import CreatePost from "./pages/CreatePost.jsx"
 import EditProfile from "./pages/EditProfile.jsx"
 import PublicProfile from "./pages/PublicProfile.jsx"
 import PostFeed from "./pages/PostFeed.jsx";
+import Chat from "./pages/Chat.jsx"
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/profile/:userId" element={<PublicProfile />} />
         <Route path="/profile/:userId/posts/:index" element={<PostFeed />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </ToastProvider>
   )
