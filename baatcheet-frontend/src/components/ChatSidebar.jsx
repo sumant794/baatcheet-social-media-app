@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import api from "../api/axios";
-
+import api from "../api/axios.js";
+import "../styles/sidebar.css"
 export default function ChatSidebar({setActiveChat, loggedInUserId}) {
     const [conversations, setConversations] = useState([])
 
@@ -38,10 +38,10 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
                     <div
                         key={convo._id}
                         className="sidebar-user"
-                        onClick={setActiveChat(convo)}
+                        onClick={() => setActiveChat(convo)}
                     >
-                        <img 
-                            src= ""
+                        <img
+                            src="default-avatar.png"
                             alt=""
                             className="sidebar-avatar"
                         />

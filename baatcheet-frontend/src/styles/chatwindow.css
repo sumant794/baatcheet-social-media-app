@@ -1,0 +1,22 @@
+.chatwindow-container {
+  height: 100%;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.chatwindow-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: gray;
+}
+
+/* Message box */
+.message {
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: #f1f1f1;
+  max-width: 60%;
+}
