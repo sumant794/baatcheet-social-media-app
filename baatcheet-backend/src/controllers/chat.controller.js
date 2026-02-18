@@ -6,8 +6,11 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { Message } from "../models/message.model.js";
 
 const createConversation = asyncHandler(async(req, res) => {
+    console.log("CreateConversation is hit")
     const senderId = req.user?._id
+    console.log(senderId)
     const { receiverId } = req.body;
+    console.log(req.body)
 
     if(!receiverId) {
         throw new ApiError(400, "ReceiverId is required")
@@ -21,7 +24,10 @@ const createConversation = asyncHandler(async(req, res) => {
         members: { $all: [senderId, receiverId] }
     })
 
+    console.log(conversation)
+
     if(conversation) {
+        console.log("heyy")
         return res.status(200).json(
             new ApiResponse(
                 200,
@@ -32,17 +38,17 @@ const createConversation = asyncHandler(async(req, res) => {
     }
 
     conversation = await Conversation.create({
-        menbers: [senderId, receiverId]
+        members: [senderId, receiverId]
     })
 
+    console.log("conversation-2: ",conversation)
+
     return res.status(201).json(
-        new ApiResponse(201).json(
             new ApiResponse(
                 201,
                 conversation,
                 "Conversation created successfully"
             )
-        )
     )
 
 
@@ -50,7 +56,7 @@ const createConversation = asyncHandler(async(req, res) => {
 
 const getUserConversations = asyncHandler(async (req, res) => {
     const userId = req.user?._id
-
+    console.log(userId)
     if(!mongoose.isValidObjectId(userId)){
         throw new ApiError(400, "Innvalid User Id")
     }
@@ -61,6 +67,8 @@ const getUserConversations = asyncHandler(async (req, res) => {
     .populate("members", "username fullName avatar")
     .sort({ lastMessageAt: -1, updatedAt: -1})
 
+    console.log("user-conversation: ",conversations)
+
     return res.status(200).json(
         new ApiResponse(200, conversations, "Conversations fetched Successfully")
     )
@@ -69,14 +77,15 @@ const getUserConversations = asyncHandler(async (req, res) => {
 const getMessages =  asyncHandler(async(req, res) => {
 
     const { conversationId } = req.params
+    console.log(req.params)
     const userId = req.user?._id
-
+    console.log(userId)
     if(!mongoose.isValidObjectId(conversationId)) {
         throw new ApiError(400, "Invalid Convesation Id");
     }
 
     const conversation = await Conversation.findById(conversationId)
-
+    console.log(conversation)
     if(!conversation) {
         throw new ApiError(404, "Conversation not found");
     }
@@ -86,7 +95,7 @@ const getMessages =  asyncHandler(async(req, res) => {
     }
 
     const page = parseInt(req.query.page) || 1;
-    const limit = parseint(req.query.limit) || 50;
+    const limit = parseInt(req.query.limit) || 50;
     const skip = (page - 1) * limit;
 
     const messages = await Message.find({
@@ -96,6 +105,8 @@ const getMessages =  asyncHandler(async(req, res) => {
     .sort({ createdAt: 1})
     .skip(skip)
     .limit(limit)
+
+    console.log(messages)
 
     return res.status(200).json(
         new ApiResponse(
@@ -108,8 +119,9 @@ const getMessages =  asyncHandler(async(req, res) => {
 
 const sendMessage = asyncHandler(async(req, res) => {
     const senderId = req.user?._id
+    console.log(senderId)
     const { conversationId, text } = req.body
-
+    console.log(req.body)
     if(!conversationId) {
         throw new ApiError(400, "conversation Id is required")
     }
@@ -123,6 +135,7 @@ const sendMessage = asyncHandler(async(req, res) => {
     }
 
     const conversation = await Conversation.findById(conversationId)
+    console.log("Message: ",conversation)
 
     if(!conversation) {
         throw new ApiError(404, "Conversation not found")
@@ -131,6 +144,8 @@ const sendMessage = asyncHandler(async(req, res) => {
     const isMember = conversation.members.some(
         (member) => member.toString() === senderId.toString()
     )
+
+    console.log(isMember)
 
     if(!isMember){
         throw new ApiError(403, "You are not allowed to send message in this conversation")
@@ -142,7 +157,7 @@ const sendMessage = asyncHandler(async(req, res) => {
         text,
         messageType: "text"
     })
-
+    console.log("created-message: ", message)
     conversation.lastMessage = text;
     conversation.lastMessageAt = new Date()
 
@@ -152,6 +167,8 @@ const sendMessage = asyncHandler(async(req, res) => {
         message._id
     )
     .populate("senderId", "username fullName avatar")
+
+    console.log("Populated-msg: ", populatedMessage)
 
     return res.status(201).json(
         new ApiResponse(

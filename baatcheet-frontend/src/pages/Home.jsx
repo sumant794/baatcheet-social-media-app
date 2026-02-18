@@ -10,6 +10,7 @@ export default function Home() {
 	const [posts, setPosts] = useState([])
 	const [loading, setLoading] = useState(true)
 	
+	
 	const fetchFeed = async () => {
 		try {
 			const response = await api.get("/post/f/feed")

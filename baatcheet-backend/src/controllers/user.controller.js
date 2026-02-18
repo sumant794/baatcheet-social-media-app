@@ -90,16 +90,16 @@ const loginUser = asyncHandler(async(req, res) => {
         "-password"
     )
     
-    const options = {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none"
-    };
-
     // const options = {
     //     httpOnly: true,
-    //     secure: true
-    // }
+    //     secure: true,
+    //     sameSite: "none"
+    // };
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
 
 
     return res
@@ -125,16 +125,16 @@ const logoutUser = asyncHandler(async(req, res) => {
         }
     )
     
-    const options = {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none"
-    };
-
     // const options = {
     //     httpOnly: true,
-    //     secure: true
-    // }
+    //     secure: true,
+    //     sameSite: "none"
+    // };
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
 
 
     return res
