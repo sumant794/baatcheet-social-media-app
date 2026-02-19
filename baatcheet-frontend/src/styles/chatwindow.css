@@ -6,6 +6,57 @@
 
 .chatwindow-container {
   flex: 1;
-  padding: 15px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.chat-header {
+    display: flex;
+    padding: 6px;
+    gap: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+.chat-header img{
+    margin-left: 10px;
+}
+/* Message row */
+.message-row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+/* Align left */
+.message-row.other {
+    margin-left: 10px;
+  justify-content: flex-start;
+}
+
+/* Align right */
+.message-row.me {
+    margin-right: 10px;
+  justify-content: flex-end;
+}
+
+/* Bubble design */
+.bubble {
+  max-width: 60%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: 14px;
+  word-wrap: break-word;
+}
+
+/* Other user bubble */
+.message-row.other .bubble {
+  background-color: #f1f1f1;
+  color: black;
+}
+
+/* My bubble */
+.message-row.me .bubble {
+  background-color: #0084ff;
+  color: white;
 }

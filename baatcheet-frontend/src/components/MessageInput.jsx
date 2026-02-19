@@ -10,7 +10,7 @@ export default function MessageInput({ activeChat, setMessages}){
 
         try {
             const res = await api.post(
-                "/chat/messages",
+                "/chat/message",
                 {
                     conversationId: activeChat._id,
                     text
@@ -30,21 +30,23 @@ export default function MessageInput({ activeChat, setMessages}){
     }
 
     return (
-        <div clasName="message-input-container">
-            <input
-                type="text"
-                placeholder="Type a message..."
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                className="message-input"
-            />
+        <div className="message-input-container">
 
-            <button
-                onClick={sendMessage}
-                className="send-btn"
-            >
-                Send
-            </button>
+                <input
+                    type="text"
+                    placeholder="Type a message..."
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    className="message-input"
+                />
+            
+                <button
+                    onClick={sendMessage}
+                    className="send-btn"
+                >
+                    Send
+                </button>
+           
         </div>
     )
 }

@@ -3,7 +3,7 @@ import api from "../api/axios.js";
 import "../styles/chatwindow.css"
 import MessageInput from "./MessageInput.jsx";
 
-export default function ChatWindow ({ activeChat }){
+export default function ChatWindow ({ activeChat, loggedInUserId }){
     const [messages, setMessages] = useState([])
 
     const fetchMessages = async () => {
@@ -39,16 +39,28 @@ export default function ChatWindow ({ activeChat }){
     return(
         <div className="chatwindow-wrapper">
             <div className="chatwindow-container">
+
+                <div className="chat-header">
+                    <img
+                        src={
+                            activeChat.members[0].avatar || "default-avatar.png"
+                        }
+                    />
+
+                    <h3>{activeChat.members[0].fullName}</h3>
+                </div>
                 {messages.map((msg) => {
+                    const isMe = msg.senderId?._id === loggedInUserId
                     return(
                         <div
                             key={msg._id}
-                            className="message"
+                            className={`message-row ${
+                                isMe ? "me" : "other"
+                            }`}
                         >
-                            <b>
-                                {msg.senderId.username}
-                            </b>
-                            <p>{msg.text}</p>
+                            <div className="bubble">
+                                <p>{msg.text}</p>
+                            </div>
                         </div>
                 )})}
             </div>
@@ -57,7 +69,7 @@ export default function ChatWindow ({ activeChat }){
                 activeChat={activeChat}
                 setMessages={setMessages}
             />
-            
+
         </div>
     )
 }

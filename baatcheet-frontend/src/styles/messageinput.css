@@ -1,24 +1,33 @@
 .message-input-container {
   display: flex;
-  padding: 10px;
+  align-items: center;
+  padding: 12px;
   border-top: 1px solid #ddd;
+  background-color: #fff;
+  gap: 10px;
 }
 
+/* IMPORTANT FIX */
 .message-input {
-  flex: 1;
-  padding: 8px;
+  flex: 1;          /* take remaining space */
+  padding: 10px 15px;
+  border-radius: 20px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
 }
+
+/* Remove width:100% if present */
+/* width:100% hata do */
 
 .send-btn {
-  margin-left: 10px;
-  padding: 8px 15px;
+  padding: 9px 18px;
+  border-radius: 20px;
   border: none;
   background-color: #0084ff;
   color: white;
-  border-radius: 6px;
   cursor: pointer;
+  white-space: nowrap; /* prevent wrap */
 }
 
 .send-btn:hover {

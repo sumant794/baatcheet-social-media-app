@@ -26,6 +26,7 @@ export default function Chat() {
       <div className="chat-window">
         <ChatWindow
           activeChat={activeChat}
+          loggedInUserId={loggedInUserId}
         />
       </div>
 
