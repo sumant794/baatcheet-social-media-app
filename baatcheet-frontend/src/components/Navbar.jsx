@@ -116,7 +116,7 @@ export default function Navbar(){
 
                 <div className="nav-item">
                     <FaRegCommentDots className="nav-icon"/>
-                    <Link to="/mesages">Messages</Link>
+                    <Link to="/chat">Messages</Link>
                 </div>
 
                 <div className="nav-item">

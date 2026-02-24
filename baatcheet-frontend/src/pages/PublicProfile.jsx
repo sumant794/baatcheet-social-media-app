@@ -14,6 +14,16 @@ export default function PublicProfile(){
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(true)
     const [isFollowing, setIsFollowing] = useState(false)
+    
+    const handleMessage = async () => {
+        try {
+            const res = await api.post("/chat/conversation", { receiverId: userId })
+            const conversation = res.data.data
+            navigate("/chat", { state: { conversation } })
+        } catch (error) {
+            console.error("create conversation error:", error)
+        }
+    }
 
     const fetchProfile = async () => {
         const res = await api.get(`/users/u/${userId}`)
@@ -111,7 +121,7 @@ export default function PublicProfile(){
                                 : "Follow"
                             }
                         </button>
-                        <button>Message</button>
+                        <button onClick={handleMessage}>Message</button>
                     </div>
 
                     <h3>Posts By {user.fullName}</h3>

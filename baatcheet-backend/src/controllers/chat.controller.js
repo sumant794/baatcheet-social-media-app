@@ -22,7 +22,7 @@ const createConversation = asyncHandler(async(req, res) => {
 
     let conversation = await Conversation.findOne({
         members: { $all: [senderId, receiverId] }
-    })
+    }).populate("members", "username fullName avatar")
 
     console.log(conversation)
 
@@ -41,12 +41,17 @@ const createConversation = asyncHandler(async(req, res) => {
         members: [senderId, receiverId]
     })
 
-    console.log("conversation-2: ",conversation)
+    const populatedConversation = await Conversation.findById(conversation._id).populate(
+        "members",
+        "username fullName avatar"
+    )
+
+    console.log("conversation-2: ", populatedConversation)
 
     return res.status(201).json(
             new ApiResponse(
                 201,
-                conversation,
+                populatedConversation,
                 "Conversation created successfully"
             )
     )

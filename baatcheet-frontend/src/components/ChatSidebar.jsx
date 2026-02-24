@@ -18,7 +18,7 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
 
     useEffect(() => {
         fetchConversations()
-    })
+    }, [])
 
     const  getOtherUser = (members) => {
         return members.find(
