@@ -4,7 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Message } from "../models/message.model.js";
-import { getIO } from "..../socket/socket.js";
+import { getIO } from "../socket/socket.js";
 
 const createConversation = asyncHandler(async(req, res) => {
     console.log("CreateConversation is hit")
