@@ -4,6 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Message } from "../models/message.model.js";
+import { getIO } from "..../socket/socket.js";
 
 const createConversation = asyncHandler(async(req, res) => {
     console.log("CreateConversation is hit")
@@ -173,7 +174,15 @@ const sendMessage = asyncHandler(async(req, res) => {
     )
     .populate("senderId", "username fullName avatar")
 
-    console.log("Populated-msg: ", populatedMessage)
+    const io = getIO()
+
+    io.to(conversationId.toString()).emit("receive_message", populatedMessage)
+
+    io.to(conversationId.toString()).emit("sidebar_update", {
+        conversationId,
+        lastMessage: text,
+        lastMessageAt: conversation.lastMessageAt
+    })
 
     return res.status(201).json(
         new ApiResponse(
