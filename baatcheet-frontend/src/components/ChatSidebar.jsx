@@ -7,8 +7,10 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
     const fetchConversations = async () => {
         try {
             const res = await api.get("/chat/conversations")
+            //console.log("chat-sidebar: ",res)
 
             setConversations(res.data.data)
+            
         } catch (error) {
             console.error(
                 "conversation fetch error: ", error
@@ -18,6 +20,7 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
 
     useEffect(() => {
         fetchConversations()
+        //console.log("ChatSidebar: ",conversations)
     }, [])
 
     const  getOtherUser = (members) => {
@@ -33,7 +36,9 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
                 Chats
             </h3>
             {conversations.map((convo) => {
+                console.log("ChatSidebar: ",conversations)
                 const otherUser = getOtherUser(convo.members)
+                console.log("Other-User: ", otherUser)
                 return (
                     <div
                         key={convo._id}
@@ -41,7 +46,7 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
                         onClick={() => setActiveChat(convo)}
                     >
                         <img
-                            src="default-avatar.png"
+                            src={otherUser.avatar || "default-avatar.png"}
                             alt=""
                             className="sidebar-avatar"
                         />

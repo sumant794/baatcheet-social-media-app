@@ -58,7 +58,7 @@ export default function ChatWindow({ activeChat,loggedInUserId }) {
         <div className="chat-header">
             <img
             src={
-                activeChat.members[0]
+                activeChat.members[1]
                 ?.avatar ||
                 "default-avatar.png"
             }
@@ -67,7 +67,7 @@ export default function ChatWindow({ activeChat,loggedInUserId }) {
 
             <h3>
             {
-                activeChat.members[0]
+                activeChat.members[1]
                 ?.fullName
             }
             </h3>
