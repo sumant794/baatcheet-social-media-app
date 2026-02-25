@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../api/axios.js";
 import "../styles/chatwindow.css";
 import MessageInput from "./MessageInput.jsx";
+import { socket } from "../socket/socket.js";
 
 export default function ChatWindow({ activeChat,loggedInUserId }) {
     const [messages, setMessages] = useState([]);
@@ -24,8 +25,20 @@ export default function ChatWindow({ activeChat,loggedInUserId }) {
     };
 
     useEffect(() => {
-        fetchMessages();
-    }, [activeChat]);
+        fetchMessages()
+    }, [activeChat])
+
+    useEffect(() => {
+        if(!activeChat?._id) return;
+
+        socket.emit("join_chat", activeChat._id)
+
+        console.log("Joined room:",activeChat._id)
+
+        return () => {
+            socket.emit("leave_chat", activeChat._id)
+        }
+    }, [activeChat])
 
     useEffect(() => {
         const el =
@@ -40,6 +53,18 @@ export default function ChatWindow({ activeChat,loggedInUserId }) {
         });
         }
     }, [messages]);
+
+    useEffect(() => {
+        socket.on("receive_message", (message) => {
+            if(message.conversationId !== activeChat?._id) return
+
+            setMessages((prev) => [...prev, message])
+        })
+
+        return () => {
+            socket.off("receive_message")
+        }
+    }, [activeChat])
 
     if (!activeChat) {
     return (

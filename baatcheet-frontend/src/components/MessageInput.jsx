@@ -2,24 +2,24 @@ import { useState } from "react";
 import api from "../api/axios";
 import "../styles/messageinput.css"
 
-export default function MessageInput({ activeChat, setMessages}){
+export default function MessageInput({ activeChat }){
     const [text, setText] = useState("")
 
     const sendMessage = async () => {
         if(!text.trim()) return;
 
         try {
-            const res = await api.post(
+            await api.post(
                 "/chat/message",
                 {
                     conversationId: activeChat._id,
                     text
                 }
             )
-                setMessages((prev) => [
-                    ...prev,
-                    res.data.data
-                ])
+                // setMessages((prev) => [
+                //     ...prev,
+                //     res.data.data
+                // ])
 
                 setText("")
         } catch (error) {

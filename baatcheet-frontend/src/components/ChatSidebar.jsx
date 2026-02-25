@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios.js";
 import "../styles/sidebar.css"
+import { socket } from "../socket/socket.js"
+
 export default function ChatSidebar({setActiveChat, loggedInUserId}) {
     const [conversations, setConversations] = useState([])
 
@@ -23,6 +25,30 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
         //console.log("ChatSidebar: ",conversations)
     }, [])
 
+    useEffect(() => {
+
+        socket.on("sidebar_update", (data) => {
+
+        setConversations((prev) =>
+            prev.map((convo) =>
+                convo._id === data.conversationId
+                    ? {
+                        ...convo,
+                        lastMessage: data.lastMessage,
+                        lastMessageAt: data.lastMessageAt
+                      }
+                    : convo
+                )
+            );
+
+        });
+
+        return () => {
+            socket.off("sidebar_update");
+        };
+
+}, []);
+    
     const  getOtherUser = (members) => {
         return members.find(
             (m) => m._id !== loggedInUserId
