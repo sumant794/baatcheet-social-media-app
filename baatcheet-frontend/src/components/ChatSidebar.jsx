@@ -72,7 +72,7 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
                         onClick={() => setActiveChat(convo)}
                     >
                         <img
-                            src={otherUser.avatar || "default-avatar.png"}
+                            src={otherUser?.avatar || "default-avatar.png"}
                             alt=""
                             className="sidebar-avatar"
                         />

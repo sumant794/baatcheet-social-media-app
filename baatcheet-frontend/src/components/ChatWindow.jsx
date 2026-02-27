@@ -4,7 +4,15 @@ import "../styles/chatwindow.css";
 import MessageInput from "./MessageInput.jsx";
 import { socket } from "../socket/socket.js";
 
-export default function ChatWindow({ activeChat,loggedInUserId }) {
+const formatTime = (date) => {
+    const d = new Date(date);
+    return d.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+    })
+}
+
+export default function ChatWindow({ activeChat, loggedInUserId }) {
     const [messages, setMessages] = useState([]);
 
     const fetchMessages = async () => {
@@ -54,17 +62,32 @@ export default function ChatWindow({ activeChat,loggedInUserId }) {
         }
     }, [messages]);
 
-    useEffect(() => {
-        socket.on("receive_message", (message) => {
-            if(message.conversationId !== activeChat?._id) return
+    // useEffect(() => {
+    //     socket.on("receive_message", (message) => {
+    //         if(message.conversationId !== activeChat?._id) return
 
-            setMessages((prev) => [...prev, message])
-        })
+    //         setMessages((prev) => [...prev, message])
+    //     })
+
+    //     return () => {
+    //         socket.off("receive_message")
+    //     }
+    // }, [activeChat])
+
+    useEffect(() => {
+
+        const handleReceive = (message) => {
+            if (message.conversationId !== activeChat?._id) return;
+            setMessages((prev) => [...prev, message]);
+        };
+
+        socket.on("receive_message", handleReceive);
 
         return () => {
-            socket.off("receive_message")
-        }
-    }, [activeChat])
+            socket.off("receive_message", handleReceive);
+        };
+
+    }, [activeChat?._id]);
 
     if (!activeChat) {
     return (
@@ -76,6 +99,9 @@ export default function ChatWindow({ activeChat,loggedInUserId }) {
     );
     }
 
+    const otherUser = activeChat?.members?.find(
+        (member) => member._id !== loggedInUserId
+    )
 
     return (
         <div className="chatwindow-wrapper">
@@ -83,7 +109,7 @@ export default function ChatWindow({ activeChat,loggedInUserId }) {
         <div className="chat-header">
             <img
             src={
-                activeChat.members[1]
+                otherUser
                 ?.avatar ||
                 "default-avatar.png"
             }
@@ -92,7 +118,7 @@ export default function ChatWindow({ activeChat,loggedInUserId }) {
 
             <h3>
             {
-                activeChat.members[1]
+                otherUser
                 ?.fullName
             }
             </h3>
@@ -115,6 +141,9 @@ export default function ChatWindow({ activeChat,loggedInUserId }) {
                 >
                 <div className="bubble">
                     <p>{msg.text}</p>
+                    <p className="msg-time">
+                        {formatTime(msg.createdAt)}
+                    </p>
                 </div>
                 </div>
             );

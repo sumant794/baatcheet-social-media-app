@@ -80,3 +80,10 @@
     background-color: #0084ff;
     color: white;
 }
+
+.msg-time {
+    font-size: 10px;
+    opacity: 0.6;
+    margin-top: 4px;
+    text-align: right;
+}
