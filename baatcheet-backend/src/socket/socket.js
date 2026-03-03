@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import { Message } from "../models/message.model";
 
 let io;
 
@@ -33,6 +34,17 @@ export const initSocket = (server) => {
     socket.on("leave_chat", (chatId) => {
       socket.leave(chatId);
     });
+
+    socket.on("mark_seen", async (conversationId) => {
+      await Message.updateMany(
+        {
+          conversationId,
+          isSeen: false
+        },
+        {isSeen: true}
+      )
+      io.to(conversationId).emit("messages_seen", conversationId)
+    })
     
   });
 };

@@ -18,3 +18,32 @@ export function instaTimeAgo(date) {
 
     return "Just now"
 }
+
+export const formatMessageTime = (date) => {
+    const d = new Date(date)
+    return d.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+    })
+}
+
+export const formatDateSeparator = (date) => {
+    const messageDate = new Date(date)
+    const today = new Date()
+
+    const isToday = messageDate.toDateString() === today.toDateString()
+
+    const yesterday = new Date()
+    yesterday.setDate(today.getDate() -1)
+
+    const isYesterday = messageDate.toDateString() === yesterday.toDateString()
+
+    if(isToday) return "Today"
+    if (isYesterday) return "Yesterday"
+
+    return messageDate.toLocaleDateString([], {
+        day: "numeric",
+        month: "long",
+        year:"numeric"
+    })
+}

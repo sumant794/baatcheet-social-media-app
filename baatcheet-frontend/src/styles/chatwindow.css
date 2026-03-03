@@ -87,3 +87,18 @@
     margin-top: 4px;
     text-align: right;
 }
+
+.date-separator {
+  text-align: center;
+  margin: 15px 0;
+  font-size: 12px;
+  opacity: 0.6;
+  font-weight: 500;
+}
+
+.seen-status {
+    font-size: 10px;
+    opacity: 0.6;
+    margin-top: 2px;
+    text-align: right;
+}

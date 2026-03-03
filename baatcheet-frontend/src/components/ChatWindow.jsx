@@ -3,14 +3,8 @@ import api from "../api/axios.js";
 import "../styles/chatwindow.css";
 import MessageInput from "./MessageInput.jsx";
 import { socket } from "../socket/socket.js";
+import { formatDateSeparator, formatMessageTime } from "../utils/timeAgo.js";
 
-const formatTime = (date) => {
-    const d = new Date(date);
-    return d.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit"
-    })
-}
 
 export default function ChatWindow({ activeChat, loggedInUserId }) {
     const [messages, setMessages] = useState([]);
@@ -47,6 +41,12 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
             socket.emit("leave_chat", activeChat._id)
         }
     }, [activeChat])
+
+    useEffect(() => {
+        if(!activeChat?._id) return
+
+        socket.emit("mark_seen", activeChat._id)
+    }, [activeChat?._id])
 
     useEffect(() => {
         const el =
@@ -89,6 +89,25 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
 
     }, [activeChat?._id]);
 
+    useEffect(() => {
+        const handleSeen = (conversationId) => {
+            if(conversationId !== activeChat?._id) return
+            
+            setMessages((prev) =>
+                prev.map((msg) =>({
+                    ...msg,
+                    isSeen:true
+                }))
+            )
+        }
+
+        socket.on("messages_seen", handleSeen)
+
+        return () => {
+            socket.off("messages_seen", handleSeen)
+        }
+    }, [activeChat?._id])
+
     if (!activeChat) {
     return (
         <div className="chatwindow-wrapper">
@@ -125,29 +144,43 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
         </div>
 
         <div className="messages-container">
-            {messages.map((msg) => {
-            const isMe =
-                msg.senderId?._id ===
-                loggedInUserId;
+            {messages.map((msg, index) => {
+                const currentDate = new Date(msg.createdAt).toDateString()
+                const prevDate = 
+                    index > 0
+                        ? new Date(messages[index - 1].createdAt).toDateString()
+                        : null
+
+                const showDateSeparator = currentDate !== prevDate
+                const isMe = msg.senderId?._id === loggedInUserId;
 
             return (
-                <div
-                key={msg._id}
-                className={`message-row ${
-                    isMe
-                    ? "me"
-                    : "other"
-                }`}
-                >
-                <div className="bubble">
-                    <p>{msg.text}</p>
-                    <p className="msg-time">
-                        {formatTime(msg.createdAt)}
-                    </p>
-                </div>
+                <div key={msg._id}>
+                    {showDateSeparator && (
+                        <div className="date-separator">
+                            {formatDateSeparator(msg.createdAt)}
+                        </div>
+                    )}
+                    <div
+                    className={`message-row ${
+                        isMe
+                        ? "me"
+                        : "other"
+                    }`}
+                    >
+                    <div className="bubble">
+                        <p>{msg.text}</p>
+                        <p className="msg-time">
+                            {formatMessageTime(msg.createdAt)}
+                        </p>
+                        {isMe && msg.isSeen && (
+                            <p className="seen-status">Seen</p>
+                        )}
+                    </div>
+                    </div>
                 </div>
             );
-            })}
+            })} 
         </div>
 
         <MessageInput
