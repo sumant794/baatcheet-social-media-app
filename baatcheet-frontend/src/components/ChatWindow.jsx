@@ -204,10 +204,12 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
         </div>
 
         {isTyping && (
-            <div className="typing-indicator">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div className="typing-wrapper">
+                <div className="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         )}
 

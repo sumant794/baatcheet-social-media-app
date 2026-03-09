@@ -103,33 +103,45 @@
     text-align: right;
 }
 
-.typing-indicator {
+.typing-wrapper{
   display: flex;
-  gap: 4px;
-  margin: 5px 10px;
+  align-items: center;
+  margin: 8px 12px;
 }
 
-.typing-indicator span {
-  width: 6px;
-  height: 6px;
-  background: gray;
+.typing-indicator{
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #e5e5ea;
+  border-radius: 16px;
+  width: fit-content;
+}
+
+
+.typing-indicator span{
+  width: 8px;
+  height: 8px;
+  background: #555;
   border-radius: 50%;
-  animation: bounce 1.2s infinite;
+  animation: typingBounce 1.6s infinite ease-in-out;
 }
 
-.typing-indicator span:nth-child(2) {
+.typing-indicator span:nth-child(2){
   animation-delay: 0.2s;
 }
 
-.typing-indicator span:nth-child(3) {
+.typing-indicator span:nth-child(3){
   animation-delay: 0.4s;
 }
 
-@keyframes bounce {
-  0%, 80%, 100% {
-    transform: scale(0);
+@keyframes typingBounce{
+  0%,80%,100%{
+    transform: scale(0.5);
+    opacity: 0.5;
   }
-  40% {
+  40%{
     transform: scale(1);
+    opacity: 1;
   }
 }
