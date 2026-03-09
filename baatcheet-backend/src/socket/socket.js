@@ -35,6 +35,14 @@ const onlineUsers = new Map()
       console.log(`User joined chat: ${chatId}`);
     });
 
+    socket.on("typing", ({conversationId, userId}) => {
+      socket.to(conversationId).emit("user_typing", userId)
+    })
+
+    socket.on("stop_typing", ({conversationId, userId}) => {
+      socket.to(conversationId).emit("user_stop_typing", userId)
+    })
+
     socket.on("disconnect", () => {
       console.log("❌ User disconnected:", socket.id);
 

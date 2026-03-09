@@ -8,6 +8,7 @@ import { formatDateSeparator, formatMessageTime } from "../utils/timeAgo.js";
 
 export default function ChatWindow({ activeChat, loggedInUserId }) {
     const [messages, setMessages] = useState([]);
+    const [isTyping, setIsTyping] = useState(false)
 
     const fetchMessages = async () => {
         if (!activeChat) return;
@@ -108,6 +109,25 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
         }
     }, [activeChat?._id])
 
+    useEffect(() => {
+        const handleTyping = () => {
+            setIsTyping(true)
+        }
+
+        const handleStopTyping = () => {
+            setIsTyping(false)
+        }
+
+        socket.on("user_typing", handleTyping)
+        socket.on("user_stop_typing", handleStopTyping)
+
+        return () => {
+            socket.off("user_typing", handleTyping)
+            socket.off("user_stop_typing", handleStopTyping)
+        }
+
+    }, [])
+
     if (!activeChat) {
     return (
         <div className="chatwindow-wrapper">
@@ -182,6 +202,14 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
             );
             })} 
         </div>
+
+        {isTyping && (
+            <div className="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        )}
 
         <MessageInput
             activeChat={activeChat}

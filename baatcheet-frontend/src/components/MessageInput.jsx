@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../api/axios";
+import { socket } from "../socket/socket";
 import "../styles/messageinput.css"
 
 export default function MessageInput({ activeChat }){
@@ -29,6 +30,18 @@ export default function MessageInput({ activeChat }){
         }
     }
 
+    let typingTimeout
+
+    const handleStopTyping = () => {
+        clearTimeout(typingTimeout)
+
+        typingTimeout = setTimeout(() => {
+            socket.emit("stop_typing", {
+                conversationId: activeChat._id
+            })
+        }, 1500)
+    }
+
     return (
         <div className="message-input-container">
 
@@ -36,7 +49,13 @@ export default function MessageInput({ activeChat }){
                     type="text"
                     placeholder="Type a message..."
                     value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    onChange={(e) => {
+                        setText(e.target.value)
+                        socket.emit("typing", {
+                            conversationId: activeChat._id
+                        })
+                        handleStopTyping()
+                    }}
                     className="message-input"
                 />
             
