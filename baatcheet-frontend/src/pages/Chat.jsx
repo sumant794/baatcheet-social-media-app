@@ -4,6 +4,7 @@ import { useAuth } from "../context/useAuth.js";
 import ChatSidebar from "../components/ChatSidebar.jsx";
 import ChatWindow from "../components/ChatWindow.jsx";
 import { useLocation } from "react-router-dom";
+import { socket } from "../socket/socket"
 
 export default function Chat() {
   const [activeChat, setActiveChat] = useState(null);
@@ -18,6 +19,12 @@ export default function Chat() {
       setActiveChat(location.state.conversation)
     }
   }, [location])
+
+  useEffect(() => {
+    if (!user?._id) return
+
+    socket.emit("user_online", user._id)
+  }, [user?._id])
 
   return (
     <div className="chat-container">    

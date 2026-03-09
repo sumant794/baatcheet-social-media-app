@@ -5,6 +5,7 @@ import { socket } from "../socket/socket.js"
 
 export default function ChatSidebar({setActiveChat, loggedInUserId}) {
     const [conversations, setConversations] = useState([])
+    const [onlineUsers, setOnlineUsers] = useState([])
 
     const fetchConversations = async () => {
         try {
@@ -47,13 +48,26 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
             socket.off("sidebar_update");
         };
 
-}, []);
+    }, []);
+
+    useEffect(() => {
+        const handleOnlineUsers = (users) => {
+            setOnlineUsers(users)
+        }
+
+        socket.on("online_users", handleOnlineUsers)
+
+        return () => {
+            socket.off("online_users", handleOnlineUsers)
+        }
+    }, [])
     
     const  getOtherUser = (members) => {
         return members.find(
             (m) => m._id !== loggedInUserId
         )
     }
+
 
 
     return (
@@ -64,6 +78,7 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
             {conversations.map((convo) => {
                 console.log("ChatSidebar: ",conversations)
                 const otherUser = getOtherUser(convo.members)
+                const isOnline = onlineUsers.includes(otherUser?._id)
                 console.log("Other-User: ", otherUser)
                 return (
                     <div
@@ -71,11 +86,14 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
                         className="sidebar-user"
                         onClick={() => setActiveChat(convo)}
                     >
-                        <img
-                            src={otherUser?.avatar || "default-avatar.png"}
-                            alt=""
-                            className="sidebar-avatar"
-                        />
+                        <div className="avatar-wrapper">
+                            <img
+                                src={otherUser?.avatar || "default-avatar.png"}
+                                alt=""
+                                className="sidebar-avatar"
+                            />
+                            {isOnline && <span className="online-dot"></span>}
+                        </div>
 
                         <div>
                             <h4>{otherUser?.username}</h4>

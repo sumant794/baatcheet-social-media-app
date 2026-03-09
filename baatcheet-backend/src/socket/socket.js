@@ -16,10 +16,18 @@ export const initSocket = (server) => {
     },
   });
 
+const onlineUsers = new Map()
+
   console.log("✅ Socket.IO initialized");
 
   io.on("connection", (socket) => {
     console.log("🔌 User connected:", socket.id);
+
+    socket.on("user_online", (userId) => {
+      onlineUsers.set(userId, socket.id)
+
+      io.emit("online_users", Array.from(onlineUsers.keys()))
+    })
 
     // join chat room
     socket.on("join_chat", (chatId) => {
@@ -29,6 +37,14 @@ export const initSocket = (server) => {
 
     socket.on("disconnect", () => {
       console.log("❌ User disconnected:", socket.id);
+
+      for (let [userId, socketId] of onlineUsers.entries()){
+        if (socketId === socket.id) {
+          onlineUsers.delete(userId)
+          break
+        }
+      }
+      io.emit("online_users", Array.from(onlineUsers.keys()))
     });
 
     socket.on("leave_chat", (chatId) => {
