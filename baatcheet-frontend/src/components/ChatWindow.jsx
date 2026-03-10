@@ -9,6 +9,7 @@ import { formatDateSeparator, formatMessageTime } from "../utils/timeAgo.js";
 export default function ChatWindow({ activeChat, loggedInUserId }) {
     const [messages, setMessages] = useState([]);
     const [isTyping, setIsTyping] = useState(false)
+    const [showMessageMenu, setShowMessageMenu] = useState(null)
 
     const fetchMessages = async () => {
         if (!activeChat) return;
@@ -27,13 +28,23 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
         }
     };
 
-    useEffect(() => {
-        fetchMessages()
-    }, [activeChat])
+    const deleteMessage = async (messageId, e) => {
+        e.stopPropagation()
+
+        try {
+            await api.delete(`/chat/message/${messageId}`)
+            setMessages((prev) =>
+                prev.filter((msg) => msg._id !== messageId)
+            )
+        } catch (error) {
+            console.error("Delete message error:", error)
+        }
+    }
 
     useEffect(() => {
         if(!activeChat?._id) return;
 
+        fetchMessages()
         socket.emit("join_chat", activeChat._id)
 
         console.log("Joined room:",activeChat._id)
@@ -63,6 +74,16 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
         }
     }, [messages, isTyping]);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.msg-menu-btn') && !event.target.closest('.msg-menu-dropdown')) {
+                setShowMessageMenu(null)
+            }
+        }
+        document.addEventListener('click', handleClickOutside)
+        return () => document.removeEventListener('click', handleClickOutside)
+    }, [])
+
 
 
     // useEffect(() => {
@@ -81,7 +102,18 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
 
         const handleReceive = (message) => {
             if (message.conversationId !== activeChat?._id) return;
-            setMessages((prev) => [...prev, message]);
+            setMessages((prev) => {
+                const existingIndex = prev.findIndex((msg) => msg._id === message._id);
+                if (existingIndex !== -1) {
+                    // Update existing message
+                    const updated = [...prev];
+                    updated[existingIndex] = message;
+                    return updated;
+                } else {
+                    // Add new message
+                    return [...prev, message];
+                }
+            });
         };
 
         socket.on("receive_message", handleReceive);
@@ -99,7 +131,7 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
             setMessages((prev) =>
                 prev.map((msg) =>({
                     ...msg,
-                    isSeen:true
+                    isSeen: msg.senderId._id === loggedInUserId ? true : msg.isSeen
                 }))
             )
         }
@@ -129,6 +161,21 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
         }
 
     }, [])
+
+    useEffect(() => {
+        const handleMessageDeleted = (data) => {
+            if (data.conversationId !== activeChat?._id) return
+            setMessages((prev) =>
+                prev.filter((msg) => msg._id !== data.messageId)
+            )
+        }
+
+        socket.on("message_deleted", handleMessageDeleted)
+
+        return () => {
+            socket.off("message_deleted", handleMessageDeleted)
+        }
+    }, [activeChat?._id])
 
     if (!activeChat) {
     return (
@@ -192,11 +239,37 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
                     >
                     <div className="bubble">
                         <p>{msg.text}</p>
-                        <p className="msg-time">
-                            {formatMessageTime(msg.createdAt)}
-                        </p>
-                        {isMe && msg.isSeen && (
-                            <p className="seen-status">Seen</p>
+                        <div className="msg-footer">
+                            <p className="msg-time">
+                                {formatMessageTime(msg.createdAt)}
+                            </p>
+                            {isMe && msg.isSeen && (
+                                <p className="seen-status">Seen</p>
+                            )}
+                        </div>
+                        {isMe && (
+                            <div className="msg-menu-wrapper">
+                                <button
+                                    className="msg-menu-btn"
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        setShowMessageMenu(showMessageMenu === msg._id ? null : msg._id)
+                                    }}
+                                    title="Delete message"
+                                >
+                                    ▼
+                                </button>
+                                {showMessageMenu === msg._id && (
+                                    <div className="msg-menu-dropdown">
+                                        <button
+                                            className="msg-menu-item delete-msg-option"
+                                            onClick={(e) => deleteMessage(msg._id, e)}
+                                        >
+                                            🗑️ Delete
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         )}
                     </div>
                     </div>
