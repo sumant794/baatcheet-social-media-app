@@ -3,9 +3,10 @@ import api from "../api/axios.js";
 import "../styles/sidebar.css"
 import { socket } from "../socket/socket.js"
 
-export default function ChatSidebar({setActiveChat, loggedInUserId}) {
+export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat}) {
     const [conversations, setConversations] = useState([])
     const [onlineUsers, setOnlineUsers] = useState([])
+    const [unreadMap, setUnreadMap] = useState({})
 
     const fetchConversations = async () => {
         try {
@@ -42,6 +43,14 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
                 )
             );
 
+            // Increment unread if not active chat
+            if (data.conversationId !== activeChat?._id?.toString()) {
+                setUnreadMap((prev) => ({
+                    ...prev,
+                    [data.conversationId]: (prev[data.conversationId] || 0) + 1
+                }))
+            }
+
         });
 
         return () => {
@@ -50,7 +59,7 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
 
     }, []);
 
-    useEffect(() => {
+   useEffect(() => {
         const handleOnlineUsers = (users) => {
             setOnlineUsers(users)
         }
@@ -61,7 +70,7 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
             socket.off("online_users", handleOnlineUsers)
         }
     }, [])
-    
+
     const  getOtherUser = (members) => {
         return members.find(
             (m) => m._id !== loggedInUserId
@@ -79,12 +88,20 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
                 console.log("ChatSidebar: ",conversations)
                 const otherUser = getOtherUser(convo.members)
                 const isOnline = onlineUsers.includes(otherUser?._id)
+                const unreadCount = unreadMap[convo._id] || 0
+
                 console.log("Other-User: ", otherUser)
                 return (
                     <div
                         key={convo._id}
                         className="sidebar-user"
-                        onClick={() => setActiveChat(convo)}
+                        onClick={() => {
+                            setActiveChat(convo)
+                            setUnreadMap((prev) => ({
+                                ...prev,
+                                [convo._id.toString()]: 0
+                            }))
+                        }}
                     >
                         <div className="avatar-wrapper">
                             <img
@@ -101,6 +118,13 @@ export default function ChatSidebar({setActiveChat, loggedInUserId}) {
                                 {convo.lastMessage || "Start Chatting"}
                             </p>
                         </div>
+
+                        {unreadCount > 0 && (
+                            <div className="unread-badge">
+                            {unreadCount}
+                            </div>
+                        )}
+
                     </div>
                 )
             })}

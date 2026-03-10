@@ -61,7 +61,9 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
             behavior: "smooth",
         });
         }
-    }, [messages]);
+    }, [messages, isTyping]);
+
+
 
     // useEffect(() => {
     //     socket.on("receive_message", (message) => {
@@ -203,12 +205,14 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
             })} 
         </div>
 
-        {isTyping && (
-            <div className="typing-wrapper">
-                <div className="typing-indicator">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+         {isTyping && (
+            <div className="typing-area">
+                <div className="typing-wrapper">
+                    <div className="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </div>
             </div>
         )}

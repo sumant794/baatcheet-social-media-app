@@ -178,7 +178,7 @@ const sendMessage = asyncHandler(async(req, res) => {
 
     io.to(conversationId.toString()).emit("receive_message", populatedMessage)
 
-    io.to(conversationId.toString()).emit("sidebar_update", {
+    io.emit("sidebar_update", {
         conversationId,
         lastMessage: text,
         lastMessageAt: conversation.lastMessageAt

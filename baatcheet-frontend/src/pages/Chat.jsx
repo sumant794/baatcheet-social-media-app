@@ -34,6 +34,7 @@ export default function Chat() {
         <ChatSidebar 
             setActiveChat={setActiveChat}
             loggedInUserId={loggedInUserId}
+            activeChat={activeChat}
         />
       </div>
 
