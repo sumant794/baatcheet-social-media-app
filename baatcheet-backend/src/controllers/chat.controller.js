@@ -181,7 +181,8 @@ const sendMessage = asyncHandler(async(req, res) => {
     io.emit("sidebar_update", {
         conversationId,
         lastMessage: text,
-        lastMessageAt: conversation.lastMessageAt
+        lastMessageAt: conversation.lastMessageAt,
+        senderId: senderId.toString()
     })
 
     return res.status(201).json(

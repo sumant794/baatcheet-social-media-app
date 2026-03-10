@@ -43,8 +43,8 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
                 )
             );
 
-            // Increment unread if not active chat
-            if (data.conversationId !== activeChat?._id?.toString()) {
+            // Increment unread if not active chat and not sent by current user
+            if (data.conversationId !== activeChat?._id?.toString() && data.senderId !== loggedInUserId) {
                 setUnreadMap((prev) => ({
                     ...prev,
                     [data.conversationId]: (prev[data.conversationId] || 0) + 1
