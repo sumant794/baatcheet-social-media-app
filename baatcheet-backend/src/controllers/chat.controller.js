@@ -194,9 +194,125 @@ const sendMessage = asyncHandler(async(req, res) => {
     )
 })
 
+const deleteConversation = asyncHandler(async(req, res) => {
+    const userId = req.user?._id
+    const { conversationId } = req.params
+
+    if(!mongoose.isValidObjectId(conversationId)) {
+        throw new ApiError(400, "Invalid Conversation Id")
+    }
+
+    const conversation = await Conversation.findById(conversationId)
+    
+    if(!conversation) {
+        throw new ApiError(404, "Conversation not found")
+    }
+
+    // Check if user is part of this conversation
+    if(!conversation.members.includes(userId)) {
+        throw new ApiError(403, "You are not part of this conversation")
+    }
+
+    // Delete all messages in this conversation
+    await Message.deleteMany({
+        conversationId: conversationId
+    })
+
+    // Delete the conversation
+    await Conversation.findByIdAndDelete(conversationId)
+
+    const io = getIO()
+    io.emit("conversation_deleted", {
+        conversationId,
+        userId: userId.toString()
+    })
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            { conversationId },
+            "Conversation deleted successfully"
+        )
+    )
+})
+
+const deleteMessage = asyncHandler(async(req, res) => {
+    const userId = req.user?._id
+    const { messageId } = req.params
+
+    if(!mongoose.isValidObjectId(messageId)) {
+        throw new ApiError(400, "Invalid Message Id")
+    }
+
+    const message = await Message.findById(messageId)
+
+    if(!message) {
+        throw new ApiError(404, "Message not found")
+    }
+
+    // Check if user is the sender
+    if(message.senderId.toString() !== userId.toString()) {
+        throw new ApiError(403, "You can only delete your own messages")
+    }
+
+    const conversationId = message.conversationId
+
+    // Delete the message
+    await Message.findByIdAndDelete(messageId)
+
+    // Check if there are any messages left in conversation
+    const messageCount = await Message.countDocuments({
+        conversationId: conversationId
+    })
+
+    // If no messages left, update lastMessage in conversation
+    if(messageCount === 0) {
+        await Conversation.findByIdAndUpdate(
+            conversationId,
+            {
+                lastMessage: "",
+                lastMessageAt: null
+            }
+        )
+    } else {
+        // Get the latest message
+        const latestMessage = await Message.findOne({
+            conversationId: conversationId
+        })
+        .sort({ createdAt: -1 })
+        .select("text createdAt")
+
+        if(latestMessage) {
+            await Conversation.findByIdAndUpdate(
+                conversationId,
+                {
+                    lastMessage: latestMessage.text,
+                    lastMessageAt: latestMessage.createdAt
+                }
+            )
+        }
+    }
+
+    const io = getIO()
+    io.to(conversationId.toString()).emit("message_deleted", {
+        messageId,
+        conversationId
+    })
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            { messageId },
+            "Message deleted successfully"
+        )
+    )
+})
+
 export {
     createConversation,
     getUserConversations,
     getMessages,
-    sendMessage
+    sendMessage,
+    deleteConversation,
+    deleteMessage
 }

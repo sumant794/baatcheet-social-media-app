@@ -56,6 +56,12 @@ export default function MessageInput({ activeChat }){
                         })
                         handleStopTyping()
                     }}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault()
+                            sendMessage()
+                        }
+                    }}
                     className="message-input"
                 />
             
