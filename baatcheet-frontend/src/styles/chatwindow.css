@@ -50,7 +50,9 @@
 
 .message-row {
     display: flex;
-    margin-bottom: 10px;
+    align-items: flex-end;
+    margin-bottom: 12px;
+    gap: 8px;
 }
 
 .message-row.other {
@@ -66,27 +68,54 @@
 
 .bubble {
     max-width: 60%;
-    padding: 10px 14px;
-    border-radius: 18px;
-    font-size: 14px;
+    padding: 12px 16px;
+    border-radius: 20px;
+    font-size: 15px;
     word-wrap: break-word;
+    word-break: break-word;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.bubble p {
+    margin: 0;
+    line-height: 1.4;
 }
 
 .message-row.other .bubble {
-    background-color: #f1f1f1;
-    color: black;
+    background-color: #f0f0f0;
+    color: #000;
+    border-bottom-left-radius: 8px;
 }
 
 .message-row.me .bubble {
     background-color: #0084ff;
     color: white;
+    border-bottom-right-radius: 8px;
+}
+
+.msg-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 4px;
 }
 
 .msg-time {
-    font-size: 10px;
+    font-size: 12px;
+    opacity: 0.75;
+    flex-shrink: 0;
+}
+
+.message-row.other .msg-time {
     opacity: 0.6;
-    margin-top: 4px;
-    text-align: right;
+}
+
+.message-row.me .msg-time {
+    opacity: 0.8;
 }
 
 .date-separator {
@@ -98,10 +127,10 @@
 }
 
 .seen-status {
-    font-size: 10px;
-    opacity: 0.6;
-    margin-top: 2px;
-    text-align: right;
+    font-size: 11px;
+    opacity: 0.8;
+    font-weight: 500;
+    flex-shrink: 0;
 }
 
 .typing-area{
@@ -151,4 +180,85 @@
     transform: scale(1);
     opacity: 1;
   }
+}
+
+/* Message Menu Styles */
+.msg-menu-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.msg-menu-btn {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 6px 8px;
+    font-size: 14px;
+    opacity: 0;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    height: 32px;
+    width: 32px;
+    transition: all 0.2s ease;
+    hover: {
+        background-color: #f0f0f0;
+    }
+}
+
+.msg-menu-btn:hover {
+    background-color: #f0f0f0;
+    color: #555;
+    transform: scale(1.1);
+}
+
+/* Show button on message row hover */
+.message-row.me:hover .msg-menu-btn {
+    opacity: 1;
+}
+
+.msg-menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    min-width: 160px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.msg-menu-item {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.msg-menu-item:hover {
+    background-color: #f5f5f5;
+}
+
+.msg-menu-item.delete-msg-option {
+    color: #e74c3c;
+}
+
+.msg-menu-item.delete-msg-option:hover {
+    background-color: #ffe5e5;
 }

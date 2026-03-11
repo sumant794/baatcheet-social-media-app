@@ -7,6 +7,7 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
     const [conversations, setConversations] = useState([])
     const [onlineUsers, setOnlineUsers] = useState([])
     const [unreadMap, setUnreadMap] = useState({})
+    const [showDeleteMenu, setShowDeleteMenu] = useState(null)
 
     const fetchConversations = async () => {
         try {
@@ -19,6 +20,20 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
             console.error(
                 "conversation fetch error: ", error
             )
+        }
+    }
+
+    const deleteConversation = async (conversationId, e) => {
+        e.stopPropagation()
+
+        try {
+            await api.delete(`/chat/conversation/${conversationId}`)
+            setConversations((prev) =>
+                prev.filter((convo) => convo._id !== conversationId)
+            )
+            setShowDeleteMenu(null)
+        } catch (error) {
+            console.error("Delete conversation error:", error)
         }
     }
 
@@ -43,8 +58,9 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
                 )
             );
 
-            // Increment unread if not active chat and not sent by current user
-            if (data.conversationId !== activeChat?._id?.toString() && data.senderId !== loggedInUserId) {
+            // Increment unread only if this conversation is NOT active and message is not from current user
+            const isActiveConvo = activeChat && (activeChat._id == data.conversationId || String(activeChat._id) === String(data.conversationId));
+            if (!isActiveConvo && data.senderId !== loggedInUserId) {
                 setUnreadMap((prev) => ({
                     ...prev,
                     [data.conversationId]: (prev[data.conversationId] || 0) + 1
@@ -57,7 +73,7 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
             socket.off("sidebar_update");
         };
 
-    }, []);
+    }, [activeChat, loggedInUserId]);
 
    useEffect(() => {
         const handleOnlineUsers = (users) => {
@@ -69,6 +85,16 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
         return () => {
             socket.off("online_users", handleOnlineUsers)
         }
+    }, [])
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.convo-delete-btn') && !event.target.closest('.convo-delete-dropdown')) {
+                setShowDeleteMenu(null)
+            }
+        }
+        document.addEventListener('click', handleClickOutside)
+        return () => document.removeEventListener('click', handleClickOutside)
     }, [])
 
     const  getOtherUser = (members) => {
@@ -124,6 +150,29 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
                             {unreadCount}
                             </div>
                         )}
+
+                        <div className="convo-delete-wrapper">
+                            <button
+                                className="convo-delete-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    setShowDeleteMenu(showDeleteMenu === convo._id ? null : convo._id)
+                                }}
+                                title="Delete conversation"
+                            >
+                                ▼
+                            </button>
+                            {showDeleteMenu === convo._id && (
+                                <div className="convo-delete-dropdown">
+                                    <button
+                                        className="convo-delete-item"
+                                        onClick={(e) => deleteConversation(convo._id, e)}
+                                    >
+                                        🗑️ Delete
+                                    </button>
+                                </div>
+                            )}
+                        </div>
 
                     </div>
                 )
