@@ -4,6 +4,7 @@ import { FaRegHeart, FaHeart, FaRegCommentDots, FaShare } from "react-icons/fa"
 import { useAuth } from "../context/useAuth.js"
 import "../styles/feedpost.css"
 import { instaTimeAgo } from "../utils/timeAgo.js";
+import CommentsSection from "./CommentsSection.jsx";
 
 
 export default function FeedPostCard({ post, onFollow }) {
@@ -12,10 +13,13 @@ export default function FeedPostCard({ post, onFollow }) {
     const [isLiked, setIsLiked] = useState(false);
     const [likesCount, setLikesCount] = useState(post.likesCount || 0);
     const [loading, setLoading] = useState(false);
+    const [showComments, setShowComments] = useState(false);
+    const [commentCount, setCommentCount] = useState(post.commentCount || 0);
 
     useEffect(() => {
         setIsFollowing(post.isFollowing)
         setLikesCount(post.likesCount || 0)
+        setCommentCount(post.commentCount || 0)
         checkUserLiked();
     }, [post._id])
 
@@ -48,6 +52,14 @@ export default function FeedPostCard({ post, onFollow }) {
         }
     }
 
+    const handleCommentAdded = () => {
+        setCommentCount(prev => prev + 1);
+    }
+
+    const handleCommentDeleted = () => {
+        setCommentCount(prev => Math.max(0, prev - 1));
+    }
+
     return (
         <div className="feed-post-card">
 
@@ -77,7 +89,13 @@ export default function FeedPostCard({ post, onFollow }) {
                 >
                     {isLiked ? <FaHeart /> : <FaRegHeart />}
                 </button>
-                <FaRegCommentDots />
+                <button 
+                    className="comment-btn"
+                    onClick={() => setShowComments(!showComments)}
+                    title="Comments"
+                >
+                    <FaRegCommentDots />
+                </button>
                 <FaShare />
             </div>
 
@@ -91,6 +109,23 @@ export default function FeedPostCard({ post, onFollow }) {
                 <strong>{post.owner.username}  </strong>
                 {post.caption}
             </p>
+
+            {commentCount > 0 && (
+                <button 
+                    className="view-comments-btn"
+                    onClick={() => setShowComments(!showComments)}
+                >
+                    View {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
+                </button>
+            )}
+
+            {showComments && (
+                <CommentsSection 
+                    postId={post._id}
+                    onCommentAdded={handleCommentAdded}
+                    onCommentDeleted={handleCommentDeleted}
+                />
+            )}
 
             <p className="time">
                 {instaTimeAgo(post.createdAt)}
