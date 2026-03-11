@@ -28,11 +28,13 @@ app.use(cookieParser())
 import userRouter from "./routes/user.routes.js"
 import postRouter from "./routes/post.routes.js"
 import chatRouter from "./routes/chat.routes.js"
+import likeRouter from "./routes/like.routes.js"
 
 //routes declaration
 app.use("/api/v1/users", userRouter) //http://localhost:8000/api/v1/users/register
 app.use("/api/v1/post", postRouter)
 app.use("/api/v1/chat", chatRouter)
+app.use("/api/v1/likes", likeRouter)
 
 
 app.use((err, req, res, next) => {

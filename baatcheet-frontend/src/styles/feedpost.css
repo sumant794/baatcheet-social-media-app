@@ -68,6 +68,40 @@
   cursor: pointer;
 }
 
+.feed-post-actions button {
+  background: none;
+  border: none;
+  color: grey;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.feed-post-actions button:hover {
+  color: #ff6b6b;
+  transform: scale(1.1);
+}
+
+.feed-post-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.feed-post-actions button.like-btn.liked {
+  color: #e74c3c;
+}
+
+.likes-count {
+  padding: 0 10px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #000;
+  margin: 5px 0 0 0;
+}
+
 .feed-post-caption {
     color: black;
   padding: 0 10px 10px;
