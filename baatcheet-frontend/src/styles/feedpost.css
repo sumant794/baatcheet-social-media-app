@@ -130,6 +130,38 @@
   margin-left: 6px;
 }
 
+/* ===== COMMENT BUTTON WITH COUNT ===== */
+.comment-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 22px;
+    color: #262626;
+    padding: 4px;
+    transition: color 0.15s;
+    line-height: 1;
+}
+
+.comment-btn:hover { color: #8e8e8e; }
+
+.comment-count-badge {
+    font-size: 14px;
+    font-weight: 600;
+    color: #262626;
+    line-height: 1;
+    position: relative;
+    top: 1px;
+}
+
+.share-icon {
+    font-size: 20px;
+    color: #262626;
+    cursor: pointer;
+}
+
 
 @media(max-width:480px){
     .feed-post-card {

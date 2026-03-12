@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import api from "../api/axios.js";
 import "../styles/sidebar.css"
 import { socket } from "../socket/socket.js"
+import { Link } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat}) {
     const [conversations, setConversations] = useState([])
@@ -107,9 +109,10 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
 
     return (
         <div className="sidebar-container">
-            <h3 className="sidebar-title">
-                Chats
-            </h3>
+            <div className="sidebar-title">
+                <div className="arrow"><Link to="/home"><FaArrowLeft /></Link></div>
+                <h3>Chats</h3>
+            </div>
             {conversations.map((convo) => {
                 console.log("ChatSidebar: ",conversations)
                 const otherUser = getOtherUser(convo.members)

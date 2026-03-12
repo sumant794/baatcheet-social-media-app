@@ -7,7 +7,7 @@ import api from "../api/axios.js"
 import { useState, useEffect } from "react";
 
 export default function Navbar(){
-    const { user } = useAuth()
+    const { user, logout } = useAuth()
     const navigate = useNavigate()
 
     const [query, setQuery] = useState("")
@@ -41,6 +41,11 @@ export default function Navbar(){
         } finally {
             setLoading(false)
         }
+    }
+
+    const handleLogout = async () => {
+        await logout()
+        navigate("/")
     }
 
     return(
@@ -124,7 +129,9 @@ export default function Navbar(){
                     <Link to="/profile">Profile</Link>
                 </div>
 
-                <button><FaPowerOff /></button>
+                <button onClick={handleLogout}>
+                    <FaPowerOff />
+                </button>
 
                 <div className="nav-item-5" onClick={() => navigate("/create-post")}>
                     <FaPlus  />

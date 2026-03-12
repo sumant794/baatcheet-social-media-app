@@ -26,11 +26,22 @@ export const AuthProvider = ({ children }) => {
     setUserState(userData)
   }, [])
 
+  const logout = useCallback(async () => {
+    try {
+      await api.post("/users/logout")
+    } catch (error) {
+      console.log("Logout failed:", error)
+    } finally {
+      setUserState(null)
+    }
+  }, [])
+
   const contextValue = useMemo(() => ({
     user,
     setUser,
-    loading
-  }), [user, setUser, loading])
+    loading,
+    logout
+  }), [user, setUser, loading, logout])
 
   return (
     <AuthContext.Provider value={contextValue}>
