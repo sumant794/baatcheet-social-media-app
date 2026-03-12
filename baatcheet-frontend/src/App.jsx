@@ -12,6 +12,8 @@ import EditProfile from "./pages/EditProfile.jsx"
 import PublicProfile from "./pages/PublicProfile.jsx"
 import PostFeed from "./pages/PostFeed.jsx";
 import Chat from "./pages/Chat.jsx"
+import ProtectedRoute from "./components/ProtectedRoute.jsx"
+import PublicRoute from "./components/PublicRoute.jsx"
 
 
 function App() {
@@ -25,15 +27,15 @@ function App() {
   return (
     <ToastProvider>
       <Routes>
-        <Route path="/" element={<Login />}></Route>
-        <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/" element={<PublicRoute> <Login /> </PublicRoute>}></Route>
+        <Route path="/register" element={<PublicRoute> <Register /> </PublicRoute>} />
+        <Route path="/home" element={<ProtectedRoute> <Home /> </ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute> <Profile /> </ProtectedRoute>} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/profile/:userId" element={<PublicProfile />} />
         <Route path="/profile/:userId/posts/:index" element={<PostFeed />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/chat" element={<ProtectedRoute> <Chat /> </ProtectedRoute>} />
       </Routes>
     </ToastProvider>
   )
