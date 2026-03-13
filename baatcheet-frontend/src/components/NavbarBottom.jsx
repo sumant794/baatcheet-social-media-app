@@ -6,7 +6,7 @@ export default function NavbarBottom(){
     return (
         <div className="navbar-bottom">
 
-            <div className="bottom-nav-item" onClick={() => navigate("/messages")}>
+            <div className="bottom-nav-item" onClick={() => navigate("/chat")}>
                 <FaRegCommentDots className="bottom-nav-icon"/>
             </div>
 

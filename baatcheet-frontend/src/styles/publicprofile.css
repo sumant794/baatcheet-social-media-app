@@ -1,6 +1,7 @@
 .public-profile-page {
     background-color: white;
     padding: 20px 40px;
+    min-height: 100vh;
 }
 
 .arrow-and-username {
