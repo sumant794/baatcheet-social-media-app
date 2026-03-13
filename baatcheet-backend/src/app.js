@@ -9,7 +9,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "http://10.61.232.42:5173"
+      "http://10.159.37.252:5173"
     ],
     credentials: true
   })
@@ -38,7 +38,7 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }))
 app.use(express.static("public"))
 app.use(cookieParser())
 // Apply general limiter to all routes
-app.use(generalLimiter)
+//app.use(generalLimiter)
 
 //routes import 
 import userRouter from "./routes/user.routes.js"
@@ -48,7 +48,8 @@ import likeRouter from "./routes/like.routes.js"
 import commentRouter from "./routes/comment.routes.js"
 
 //routes declaration
-app.use("/api/v1/users", authLimiter, userRouter) 
+//app.use("/api/v1/users", authLimiter, userRouter) 
+app.use("/api/v1/users", userRouter) 
 app.use("/api/v1/post", postRouter)
 app.use("/api/v1/chat", chatRouter)
 app.use("/api/v1/likes", likeRouter)
