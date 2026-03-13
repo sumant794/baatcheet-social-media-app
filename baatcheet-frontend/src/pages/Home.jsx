@@ -5,6 +5,7 @@ import CreatePostCard from "../components/CreatePostCard.jsx"
 import FeedPostCard from "../components/FeedPostCard.jsx"
 import NavbarBottom from "../components/NavbarBottom.jsx"
 import "../styles/homepage.css"
+import LoadingScreen from "../components/LoadingScreen.jsx"
 
 export default function Home() {
 	const [posts, setPosts] = useState([])
@@ -36,7 +37,7 @@ export default function Home() {
 	  <div className="create-post-wrapper">
 			<CreatePostCard onPostCreated={fetchFeed}/>
 	  </div>
-	  {loading && <p style={{ textAlign:"center" }}>Loading feed...</p>}
+	  {loading && /*<p style={{ textAlign:"center" }}>Loading feed...</p>*/ <LoadingScreen />}
 
       {posts.map(post => (
         <FeedPostCard key={post._id} post={post} onFollow={fetchFeed}/>

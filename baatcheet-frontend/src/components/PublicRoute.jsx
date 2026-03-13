@@ -1,12 +1,13 @@
 import { Navigate } from "react-router-dom"
 import { useAuth } from "../context/useAuth"
+import LoadingScreen from "./LoadingScreen"
 
 export default function PublicRoute({ children }) {
 
   const { user, loading } = useAuth()
 
   if (loading) {
-    return <p>Loading...</p>
+    return <LoadingScreen />
   }
 
   if (user) {

@@ -12,8 +12,10 @@ import EditProfile from "./pages/EditProfile.jsx"
 import PublicProfile from "./pages/PublicProfile.jsx"
 import PostFeed from "./pages/PostFeed.jsx";
 import Chat from "./pages/Chat.jsx"
+import ChangePassword from "./pages/ChangePassword.jsx"
 import ProtectedRoute from "./components/ProtectedRoute.jsx"
 import PublicRoute from "./components/PublicRoute.jsx"
+import LoadingScreen from "./components/LoadingScreen.jsx"
 
 
 function App() {
@@ -21,7 +23,7 @@ function App() {
   const { loading } = useAuth()
   console.log(loading)
   if(loading) {
-    return <div style={{textAlign: "center", marginTop:"100px"}}>Loading...</div>
+    return <LoadingScreen />//<div style={{textAlign: "center", marginTop:"100px"}}>Loading...</div>
   }
 
   return (
@@ -36,6 +38,7 @@ function App() {
         <Route path="/profile/:userId" element={<PublicProfile />} />
         <Route path="/profile/:userId/posts/:index" element={<PostFeed />} />
         <Route path="/chat" element={<ProtectedRoute> <Chat /> </ProtectedRoute>} />
+        <Route path="/change-password" element={<ProtectedRoute> <ChangePassword /> </ProtectedRoute>} />
       </Routes>
     </ToastProvider>
   )
