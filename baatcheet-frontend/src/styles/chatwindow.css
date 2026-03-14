@@ -134,6 +134,7 @@
     flex-shrink: 0;
 }
 
+/*
 .typing-area{
   height: 34px;
   display: flex;
@@ -150,7 +151,6 @@
   display: flex;
   gap: 6px;
   padding: 8px 12px;
-  background: #e5e5ea;
   border-radius: 16px;
   width: fit-content;
 }
@@ -160,6 +160,36 @@
   width: 8px;
   height: 8px;
   background: #555;
+  border-radius: 50%;
+  animation: typingBounce 1.6s infinite ease-in-out;
+}
+  */
+
+.typing-area{
+  height: 34px;
+  display: flex;
+  align-items: center;
+}
+
+.typing-wrapper{
+  display: flex;
+  align-items: center;
+  margin-left: 12px;
+}
+
+.typing-indicator{
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 16px;
+  width: fit-content;
+  background: #f1f1f1;
+}
+
+.typing-indicator span{
+  width: 8px;
+  height: 8px;
+  background: #666;
   border-radius: 50%;
   animation: typingBounce 1.6s infinite ease-in-out;
 }

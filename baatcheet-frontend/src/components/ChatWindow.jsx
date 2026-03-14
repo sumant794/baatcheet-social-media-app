@@ -285,9 +285,8 @@ export default function ChatWindow({ activeChat, loggedInUserId, setActiveChat }
                 </div>
             );
             })} 
-        </div>
 
-         {isTyping && (
+            {isTyping && (
             <div className="typing-area">
                 <div className="typing-wrapper">
                     <div className="typing-indicator">
@@ -297,7 +296,11 @@ export default function ChatWindow({ activeChat, loggedInUserId, setActiveChat }
                     </div>
                 </div>
             </div>
+
         )}
+
+        </div>
+
 
         <MessageInput
             activeChat={activeChat}
