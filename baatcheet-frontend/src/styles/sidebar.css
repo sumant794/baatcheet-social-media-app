@@ -1,5 +1,7 @@
 .sidebar-container {
   padding: 10px;
+  background-color: #fff;
+  min-height: 100dvh;
 }
 
 .sidebar-title {
@@ -41,6 +43,10 @@
   height: 45px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.sidebar-user h4 {
+  color: black;
 }
 
 .last-msg {
@@ -149,4 +155,10 @@
 
 .convo-delete-item:hover {
     background-color: #ffe5e5;
+}
+
+@media(max-width: 480px){
+  .sidebar-title {
+    border-bottom: 1px solid rgb(228, 225, 225);
+  }
 }

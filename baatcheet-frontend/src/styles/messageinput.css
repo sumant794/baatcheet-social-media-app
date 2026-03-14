@@ -1,10 +1,13 @@
-.message-input-container {
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  border-top: 1px solid #ddd;
-  background-color: #fff;
-  gap: 10px;
+.message-input-container{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:#fff;
+  border-top:1px solid #ddd;
+  padding:10px;
+  display:flex;
+  gap:10px;
 }
 
 /* IMPORTANT FIX */
@@ -15,6 +18,8 @@
   border: 1px solid #ccc;
   outline: none;
   font-size: 14px;
+  color: black;
+  background-color: #fff;
 }
 
 /* Remove width:100% if present */

@@ -4,9 +4,10 @@ import "../styles/chatwindow.css";
 import MessageInput from "./MessageInput.jsx";
 import { socket } from "../socket/socket.js";
 import { formatDateSeparator, formatMessageTime } from "../utils/timeAgo.js";
+import { FaArrowLeft } from "react-icons/fa"
 
 
-export default function ChatWindow({ activeChat, loggedInUserId }) {
+export default function ChatWindow({ activeChat, loggedInUserId, setActiveChat }) {
     const [messages, setMessages] = useState([]);
     const [isTyping, setIsTyping] = useState(false)
     const [showMessageMenu, setShowMessageMenu] = useState(null)
@@ -195,6 +196,14 @@ export default function ChatWindow({ activeChat, loggedInUserId }) {
         <div className="chatwindow-wrapper">
 
         <div className="chat-header">
+
+            <button
+                className="chat-back-btn"
+                onClick={() => setActiveChat(null)}
+            >
+                <FaArrowLeft />
+            </button>
+
             <img
             src={
                 otherUser

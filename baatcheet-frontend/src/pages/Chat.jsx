@@ -8,11 +8,21 @@ import { socket } from "../socket/socket"
 
 export default function Chat() {
   const [activeChat, setActiveChat] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 480)
   const { user } = useAuth()
 
   const loggedInUserId = user._id
   console.log("Active-chat: ", activeChat)
   const location = useLocation()
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 480)
+    }
+
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   useEffect(() => {
     if (location?.state?.conversation) {
@@ -27,24 +37,27 @@ export default function Chat() {
   }, [user?._id])
 
   return (
-    <div className="chat-container">    
+    <div className="chat-container">
 
-      {/* Sidebar */}
-      <div className="chat-sidebar">
-        <ChatSidebar 
+      {(!isMobile || !activeChat) && (
+        <div className="chat-sidebar">
+          <ChatSidebar
             setActiveChat={setActiveChat}
             loggedInUserId={loggedInUserId}
             activeChat={activeChat}
-        />
-      </div>
+          />
+        </div>
+      )}
 
-      {/* Chat Window */}
-      <div className="chat-window">
-        <ChatWindow
-          activeChat={activeChat}
-          loggedInUserId={loggedInUserId}
-        />
-      </div>
+      {(!isMobile || activeChat) && (
+        <div className="chat-window">
+          <ChatWindow
+            activeChat={activeChat}
+            loggedInUserId={loggedInUserId}
+            setActiveChat={setActiveChat}
+          />
+        </div>
+      )}
 
     </div>
   );
