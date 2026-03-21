@@ -4,14 +4,15 @@ import Navbar from "../components/Navbar.jsx"
 import CreatePostCard from "../components/CreatePostCard.jsx"
 import FeedPostCard from "../components/FeedPostCard.jsx"
 import NavbarBottom from "../components/NavbarBottom.jsx"
-import "../styles/homepage.css"
 import LoadingScreen from "../components/LoadingScreen.jsx"
+import { useAuth } from "../context/useAuth.js"
+import "../styles/homepage.css"
 
 export default function Home() {
+	const { user } = useAuth()
 	const [posts, setPosts] = useState([])
 	const [loading, setLoading] = useState(true)
-	
-	
+
 	const fetchFeed = async () => {
 		try {
 			const response = await api.get("/post/f/feed")
@@ -37,11 +38,18 @@ export default function Home() {
 	  <div className="create-post-wrapper">
 			<CreatePostCard onPostCreated={fetchFeed}/>
 	  </div>
-	  {loading && /*<p style={{ textAlign:"center" }}>Loading feed...</p>*/ <LoadingScreen />}
+	  {loading && <LoadingScreen />}
 
-      {posts.map(post => (
-        <FeedPostCard key={post._id} post={post} onFollow={fetchFeed}/>
-	))}
+	{user?.isNewUser ? (
+  <div className="empty-home">
+    <h2>👋 Welcome to Baatcheet</h2>
+    <p>Start by posting something</p>
+  </div>
+) : (
+  posts.map(post => (
+    <FeedPostCard key={post._id} post={post} onFollow={fetchFeed}/>
+  ))
+)} 
 
 	<NavbarBottom />
     </div>

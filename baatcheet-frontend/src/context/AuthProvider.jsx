@@ -10,8 +10,12 @@ export const AuthProvider = ({ children }) => {
     const getCurrentUser = async () => {
       try {
         const res = await api.get("/users/current-user")
+        const {loggedInUSer, isNewUser} = res.data.data
         console.log("Current user fetched:", res.data.data)
-        setUserState(res.data.data)
+        setUserState({
+          ...loggedInUSer,
+          isNewUser
+        })
       } catch (error) {
         console.log("No active session")
       } finally {

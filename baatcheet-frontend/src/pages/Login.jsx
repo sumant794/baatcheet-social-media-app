@@ -31,10 +31,13 @@ export default function Login(){
         try {
             console.log(formData)
             const res = await api.post("/users/login", formData)
-            console.log("Login response:", res.data)
-            const userData = res.data.data
-            console.log("User data from login:", userData)
-            setUser(userData)
+            console.log("Login response:", res)
+            const {loggedInUser, isNewUser} = res.data.data
+            console.log("User data from login:", loggedInUser)
+            setUser({
+                ...loggedInUser,
+                isNewUser
+            })
             // Ensure state is updated before navigation
             setTimeout(() => {
                 navigate("/home")

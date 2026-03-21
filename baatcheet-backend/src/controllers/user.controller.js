@@ -224,11 +224,39 @@ const changeCurrentPassword = asyncHandler(async(req, res) => {
 
 })
 
+// const getCurrentUser = asyncHandler(async(req, res) => {
+//     console.log("getcurrentuser")
+//     return res
+//     .status(200)
+//     .json(new ApiResponse(200, req.user, "Current User fetched Succesfully"))
+// })
+
 const getCurrentUser = asyncHandler(async(req, res) => {
-    console.log("getcurrentuser")
+
+    const user = req.user
+
+    const postsCount = await Post.countDocuments({
+        owner: user._id
+    })
+
+    const chatsCount = await Conversation.countDocuments({
+        members: user._id
+    })
+
+    const isNewUser = postsCount === 0 && chatsCount === 0
+
     return res
     .status(200)
-    .json(new ApiResponse(200, req.user, "Current User fetched Succesfully"))
+    .json(
+        new ApiResponse(
+            200,
+            {
+                loggedInUser: user,
+                isNewUser
+            },
+            "Current User fetched Successfully"
+        )
+    )
 })
 
 const updateEmail = asyncHandler(async(req, res) => {

@@ -4,6 +4,12 @@
     padding-bottom: 60px;
 }
 
+.empty-home {
+  text-align: center;
+  padding: 40px 20px;
+  color: #555;
+}
+
 @media (max-width: 480px) {
   .create-post-wrapper {
     display: none;
