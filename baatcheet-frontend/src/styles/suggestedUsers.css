@@ -1,0 +1,115 @@
+.suggested-users {
+  margin-top: 25px;
+}
+
+/* Title */
+.suggested-title {
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+/* Container */
+.suggested-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Card */
+.suggested-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: 0.2s ease;
+}
+
+.suggested-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Left section */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Text */
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.user-username {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Button */
+.message-btn {
+  background: #0084ff;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.user-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.follow-btn {
+  background: #a5a5a5;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.follow-btn:hover {
+  background: #ddd;
+}
+
+.follow-btn.following {
+  background: #0084ff;
+  color: white;
+}
+
+/* 📱 Mobile responsive */
+@media (max-width: 480px) {
+
+  .suggested-card {
+    padding: 10px;
+  }
+
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .message-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .user-name {
+    font-size: 13px;
+  }
+}

@@ -6,6 +6,7 @@ import FeedPostCard from "../components/FeedPostCard.jsx"
 import NavbarBottom from "../components/NavbarBottom.jsx"
 import LoadingScreen from "../components/LoadingScreen.jsx"
 import { useAuth } from "../context/useAuth.js"
+import SuggestedUsers from "../components/SuggestedUsers.jsx"
 import "../styles/homepage.css"
 
 export default function Home() {
@@ -23,35 +24,53 @@ export default function Home() {
 			console.log(error)
 			setLoading(false)
 		}
-  	}
+	}
 
 
 	useEffect(() => {
 		fetchFeed()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-    
 
-    return(
-    <div className="home-page">
-      <Navbar />
-	  <div className="create-post-wrapper">
-			<CreatePostCard onPostCreated={fetchFeed}/>
-	  </div>
-	  {loading && <LoadingScreen />}
 
-	{user?.isNewUser ? (
-  <div className="empty-home">
-    <h2>👋 Welcome to Baatcheet</h2>
-    <p>Start by posting something</p>
-  </div>
-) : (
-  posts.map(post => (
-    <FeedPostCard key={post._id} post={post} onFollow={fetchFeed}/>
-  ))
-)} 
+	return (
+		<div className="home-page">
+			<Navbar />
+			<div className="create-post-wrapper">
+				<CreatePostCard onPostCreated={fetchFeed} />
+			</div>
+			{loading && <LoadingScreen />}
 
-	<NavbarBottom />
-    </div>
-    )
+			{user?.isNewUser ? (
+				<div className="empty-home">
+
+					{/* 👋 Dynamic Welcome */}
+					<h2 className="welcome-text">
+						👋 Hey {user?.fullName?.split(" ")[0]}, Welcome to Baatcheet
+					</h2>
+
+					{/* 🎬 Animation */}
+					<div className="welcome-animation">
+						<div className="pulse-circle"></div>
+						<div className="pulse-circle delay"></div>
+					</div>
+
+					{/* 📄 Description */}
+					<p className="welcome-subtext">
+						Create a post or follow and chat people below
+					</p>
+
+					{/* 👥 Suggested Users */}
+					<SuggestedUsers />
+
+				</div>
+			) : (
+				posts.map(post => (
+					<FeedPostCard key={post._id} post={post} onFollow={fetchFeed} />
+				))
+			)}
+
+			<NavbarBottom />
+		</div>
+	)
 }

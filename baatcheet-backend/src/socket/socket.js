@@ -7,9 +7,7 @@ export const initSocket = (server) => {
   io = new Server(server, {
     cors: {
       origin: [
-        "http://localhost:5173",
-        "http://10.159.37.252:5173",
-        "https://your-frontend-domain.com", // later replace
+        "https://baatcheet-social-media-app.vercel.app"
       ],
       methods: ["GET", "POST"],
       credentials: true,
