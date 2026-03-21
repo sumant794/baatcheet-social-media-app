@@ -2,6 +2,7 @@ import { Router } from "express";
 import { 
     changeCurrentPassword,
     getCurrentUser,
+    getSuggestedUsers,
     getUserProfile,
     loginUser,
     logoutUser,
@@ -33,5 +34,6 @@ router.route("/remove-avatar").patch(verifyJWT,  removeAvatar)
 router.route("/f/:accountId").post(verifyJWT, toggleFollow)
 router.route("/search").get(verifyJWT, searchUsers)
 router.route("/u/:userId").get(verifyJWT, getUserProfile)
+router.get("/suggested", verifyJWT, getSuggestedUsers)
 
 export default router;

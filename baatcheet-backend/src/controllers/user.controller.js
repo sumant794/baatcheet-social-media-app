@@ -530,6 +530,47 @@ const getUserProfile = asyncHandler(async(req, res) => {
         )
 })
 
+const getSuggestedUsers = asyncHandler(async (req, res) => {
+    const currentUserId = req.user._id
+
+    // 🔹 Find conversations of current user
+    const conversations = await Conversation.find({
+        members: currentUserId
+    })
+
+    // 🔹 Extract users already chatted with
+    const chattedUserIds = conversations.flatMap(conv => 
+        conv.members.filter(id => id.toString() !== currentUserId.toString())
+    )
+
+    // 🔹 Get random users excluding self + chatted users
+    const suggestedUsers = await User.aggregate([
+        {
+            $match: {
+                _id: {
+                    $nin: [...chattedUserIds, currentUserId]
+                }
+            }
+        },
+        { $sample: { size: 8 } }, // random users
+        {
+            $project: {
+                fullName: 1,
+                username: 1,
+                avatar: 1
+            }
+        }
+    ])
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            suggestedUsers,
+            "Suggested users fetched successfully"
+        )
+    )
+})
+
 
 
 export {
@@ -546,5 +587,6 @@ export {
     removeAvatar,
     toggleFollow,
     searchUsers,
-    getUserProfile
+    getUserProfile,
+    getSuggestedUsers
 }

@@ -9,6 +9,7 @@ import { FaPlus } from "react-icons/fa";
 
 export default function Profile() {
     const {user} = useAuth()
+    console.log("profile: ", user)
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(true)
     const isMobile = window.innerWidth <= 480;
