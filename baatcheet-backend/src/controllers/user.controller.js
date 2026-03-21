@@ -1,4 +1,6 @@
 import { User } from "../models/user.model.js";
+import { Post } from "../models/post.model.js";
+import { Conversation } from "../models/conversation.model.js";
 import mongoose, { isValidObjectId } from "mongoose";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -89,6 +91,16 @@ const loginUser = asyncHandler(async(req, res) => {
     const loggedInUser = await User.findById(user._id).select(
         "-password"
     )
+
+    const postsCount = await Post.countDocuments({
+        owner: user._id
+    })
+
+    const chatsCount = await Conversation.countDocuments({
+        members: user._id
+    });
+
+    const isNewUser = postsCount === 0 && chatsCount === 0;
     
     const options = {
         httpOnly: true,
@@ -107,7 +119,7 @@ const loginUser = asyncHandler(async(req, res) => {
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
     .json(
-        new ApiResponse(200, loggedInUser, "User Logged In Succesfully")
+        new ApiResponse(200, {loggedInUser, isNewUser}, "User Logged In Succesfully")
     )
 
 })
