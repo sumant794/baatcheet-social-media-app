@@ -90,6 +90,10 @@ CLOUDINARY_API_KEY=your_key
 CLOUDINARY_API_SECRET=your_secret
 CORS_ORIGIN=http://localhost:5173
 
+```
+---
+
+```bash
 4️⃣ Run the app
 
 Backend:
@@ -97,6 +101,9 @@ npm run dev
 
 Frontend:
 npm run dev
+
+```
+---
 
 🔌 Socket Events
 user_online
