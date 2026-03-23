@@ -1,6 +1,6 @@
 # 💬 BaatCheet - Real-Time Social Media App
 
-BaatCheet is a full-stack social media and real-time chat application built using the MERN stack. It allows users to connect, chat instantly, share posts, and interact with others seamlessly.
+BaatCheet is a full-stack social media and real-time chat application built using the MERN stack. It allows users to connect, chat instantly, and interact with others seamlessly.
 
 ---
 
@@ -115,6 +115,7 @@ Secure authentication system
 
 ![Home](./screenshots/home.png)
 ![Chat](./screenshots/chat.png)
+![Home](https://raw.githubusercontent.com/sumant794/baatcheet-social-media-app/main/screenshots/home.png)
 
 ⚠️ Known Issues
 Backend may take time to respond initially (Render free tier sleep mode)
