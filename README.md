@@ -111,11 +111,8 @@ Handling production deployment issues (CORS, HTTPS, Render sleep)
 State management in React
 Secure authentication system
 
-## 📸 Screenshots
-
+## Screenshots
 ![Home](./screenshots/home.png)
-![Chat](./screenshots/chat.png)
-![Home](https://raw.githubusercontent.com/sumant794/baatcheet-social-media-app/main/screenshots/home.png)
 
 ⚠️ Known Issues
 Backend may take time to respond initially (Render free tier sleep mode)
