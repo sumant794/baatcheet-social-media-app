@@ -120,7 +120,13 @@ Secure authentication system
 
 ## Screenshots
 ![Home](./screenshots/home.png) ![Chat](./screenshots/chat.png)
-
+![Home-Mobile](./screenshots/home-mobile.jpeg)
+![Register-Mobile](./screenshots/register-page-mobile.jpeg)
+![Chat-Mobile](./screenshots/chat-mobile.jpeg)
+![Profile](./screenshots/profile.png)
+![Create-Post-Mobile](./screenshots/create-post-mobile.jpeg)
+![Comment-System](./screenshots/comment-system.jpeg)
+![Edit-Profile](./screenshots/edit-profile-page.jpeg)
 ⚠️ Known Issues
 Backend may take time to respond initially (Render free tier sleep mode)
 Mixed content warnings if image URLs are not HTTPS
