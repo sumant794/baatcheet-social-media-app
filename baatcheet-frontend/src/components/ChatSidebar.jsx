@@ -5,7 +5,7 @@ import { socket } from "../socket/socket.js"
 import { Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 
-export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat}) {
+export default function ChatSidebar({ setActiveChat, loggedInUserId, activeChat }) {
     const [conversations, setConversations] = useState([])
     const [onlineUsers, setOnlineUsers] = useState([])
     const [unreadMap, setUnreadMap] = useState({})
@@ -14,10 +14,8 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
     const fetchConversations = async () => {
         try {
             const res = await api.get("/chat/conversations")
-            //console.log("chat-sidebar: ",res)
-
             setConversations(res.data.data)
-            
+
         } catch (error) {
             console.error(
                 "conversation fetch error: ", error
@@ -41,27 +39,29 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
 
     useEffect(() => {
         fetchConversations()
-        //console.log("ChatSidebar: ",conversations)
     }, [])
 
     useEffect(() => {
 
         socket.on("sidebar_update", (data) => {
 
-        setConversations((prev) =>
-            prev.map((convo) =>
-                convo._id === data.conversationId
-                    ? {
-                        ...convo,
-                        lastMessage: data.lastMessage,
-                        lastMessageAt: data.lastMessageAt
-                      }
-                    : convo
+            setConversations((prev) =>
+                prev.map((convo) =>
+                    convo._id === data.conversationId
+                        ? {
+                            ...convo,
+                            lastMessage: data.lastMessage,
+                            lastMessageAt: data.lastMessageAt
+                        }
+                        : convo
                 )
             );
 
             // Increment unread only if this conversation is NOT active and message is not from current user
-            const isActiveConvo = activeChat && (activeChat._id == data.conversationId || String(activeChat._id) === String(data.conversationId));
+            const isActiveConvo = activeChat && 
+                (
+                    activeChat._id == data.conversationId || String(activeChat._id) === String(data.conversationId)
+                );
             if (!isActiveConvo && data.senderId !== loggedInUserId) {
                 setUnreadMap((prev) => ({
                     ...prev,
@@ -77,7 +77,7 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
 
     }, [activeChat, loggedInUserId]);
 
-   useEffect(() => {
+    useEffect(() => {
         const handleOnlineUsers = (users) => {
             setOnlineUsers(users)
         }
@@ -99,7 +99,7 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
         return () => document.removeEventListener('click', handleClickOutside)
     }, [])
 
-    const  getOtherUser = (members) => {
+    const getOtherUser = (members) => {
         return members.find(
             (m) => m._id !== loggedInUserId
         )
@@ -114,12 +114,10 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
                 <h3>Chats</h3>
             </div>
             {conversations.map((convo) => {
-                console.log("ChatSidebar: ",conversations)
                 const otherUser = getOtherUser(convo.members)
                 const isOnline = onlineUsers.includes(otherUser?._id)
                 const unreadCount = unreadMap[convo._id] || 0
 
-                console.log("Other-User: ", otherUser)
                 return (
                     <div
                         key={convo._id}
@@ -150,7 +148,7 @@ export default function ChatSidebar({setActiveChat, loggedInUserId, activeChat})
 
                         {unreadCount > 0 && (
                             <div className="unread-badge">
-                            {unreadCount}
+                                {unreadCount}
                             </div>
                         )}
 

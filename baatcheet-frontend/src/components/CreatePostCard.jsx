@@ -6,7 +6,7 @@ import { useAuth } from "../context/useAuth.js"
 import { useToast } from "../context/useToast.js"
 
 
-export default function CreatePostcard({ onPostCreated }){
+export default function CreatePostcard({ onPostCreated }) {
     const [caption, setCaption] = useState("")
     const [image, setImage] = useState(null)
     const [imagePreview, setImagePreview] = useState(null)
@@ -14,18 +14,17 @@ export default function CreatePostcard({ onPostCreated }){
     const [postSuccess, setPostSuccess] = useState(false)
     const { user } = useAuth()
     const { showToast } = useToast()
-    console.log("CreatePostCard rendering with user:", user)
 
     const handleImageChange = (e) => {
         const file = e.target.files[0]
-        if(file){
+        if (file) {
             setImage(file)
             setImagePreview(URL.createObjectURL(file))
         }
     }
 
     const handlePost = async () => {
-        if(!caption.trim() || !image){
+        if (!caption.trim() || !image) {
             showToast("Image and caption is required", "error")
             return
         }
@@ -40,8 +39,6 @@ export default function CreatePostcard({ onPostCreated }){
                     "Content-Type": "multipart/form-data"
                 }
             })
-            console.log(response)
-            console.log("Post Created:", response.data)
 
             setPostSuccess(true)
             showToast("Post uploaded successfully ✅", "success")
@@ -55,7 +52,6 @@ export default function CreatePostcard({ onPostCreated }){
             }, 2000)
 
         } catch (error) {
-            console.log(error)
             showToast(
                 error.response?.data?.message || "Post upload failed",
                 "error"
@@ -66,14 +62,14 @@ export default function CreatePostcard({ onPostCreated }){
         }
     }
 
-    
-    return(
+
+    return (
         <div className="create-post-card">
 
             <div className="create-post-left">
 
                 <div className="create-post-header">
-                    <img 
+                    <img
                         src={user?.avatar || "/default-avatar.png"}
                         className="create-post-avatar"
                         alt="user"
@@ -81,26 +77,26 @@ export default function CreatePostcard({ onPostCreated }){
                     <span className="create-post-username">{user?.fullName || "User"}</span>
                 </div>
 
-                <textarea 
+                <textarea
                     placeholder="What's on your mind?"
-                    value={caption} 
-                    onChange={(e)=>setCaption(e.target.value)}
+                    value={caption}
+                    onChange={(e) => setCaption(e.target.value)}
                 />
 
                 <div className="create-post-actions">
                     <label className="image-upload-btn">
                         <div className="image-upload-text">
-                            <FaImage className="img-icon"/>
-                             <span>Choose from gallery</span>
+                            <FaImage className="img-icon" />
+                            <span>Choose from gallery</span>
                         </div>
-                        <input 
+                        <input
                             type="file"
                             accept="image/*"
                             hidden
                             onChange={handleImageChange}
                         />
                     </label>
-                    <button 
+                    <button
                         onClick={handlePost}
                         disabled={loading}
                         className={loading ? "posting" : ""}
@@ -129,8 +125,8 @@ export default function CreatePostcard({ onPostCreated }){
                             </div>
                         )}
 
-                    </div> 
-                ):(
+                    </div>
+                ) : (
                     <div className="image-placeholder">
                         Image Preview
                     </div>

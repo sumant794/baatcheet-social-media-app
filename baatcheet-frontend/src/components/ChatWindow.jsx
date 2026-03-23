@@ -16,16 +16,16 @@ export default function ChatWindow({ activeChat, loggedInUserId, setActiveChat }
         if (!activeChat) return;
 
         try {
-        const res = await api.get(
-            `chat/messages/${activeChat._id}`
-        );
+            const res = await api.get(
+                `chat/messages/${activeChat._id}`
+            );
 
-        setMessages(res.data.data);
+            setMessages(res.data.data);
         } catch (error) {
-        console.error(
-            "Messages fetch error:",
-            error
-        );
+            console.error(
+                "Messages fetch error:",
+                error
+            );
         }
     };
 
@@ -43,12 +43,10 @@ export default function ChatWindow({ activeChat, loggedInUserId, setActiveChat }
     }
 
     useEffect(() => {
-        if(!activeChat?._id) return;
+        if (!activeChat?._id) return;
 
         fetchMessages()
         socket.emit("join_chat", activeChat._id)
-
-        console.log("Joined room:",activeChat._id)
 
         return () => {
             socket.emit("leave_chat", activeChat._id)
@@ -56,22 +54,22 @@ export default function ChatWindow({ activeChat, loggedInUserId, setActiveChat }
     }, [activeChat])
 
     useEffect(() => {
-        if(!activeChat?._id) return
+        if (!activeChat?._id) return
 
         socket.emit("mark_seen", activeChat._id)
     }, [activeChat?._id])
 
     useEffect(() => {
         const el =
-        document.querySelector(
-            ".messages-container"
-        );
+            document.querySelector(
+                ".messages-container"
+            );
 
         if (el) {
-        el.scrollTo({
-            top: el.scrollHeight,
-            behavior: "smooth",
-        });
+            el.scrollTo({
+                top: el.scrollHeight,
+                behavior: "smooth",
+            });
         }
     }, [messages, isTyping]);
 
@@ -85,19 +83,6 @@ export default function ChatWindow({ activeChat, loggedInUserId, setActiveChat }
         return () => document.removeEventListener('click', handleClickOutside)
     }, [])
 
-
-
-    // useEffect(() => {
-    //     socket.on("receive_message", (message) => {
-    //         if(message.conversationId !== activeChat?._id) return
-
-    //         setMessages((prev) => [...prev, message])
-    //     })
-
-    //     return () => {
-    //         socket.off("receive_message")
-    //     }
-    // }, [activeChat])
 
     useEffect(() => {
 
@@ -127,10 +112,10 @@ export default function ChatWindow({ activeChat, loggedInUserId, setActiveChat }
 
     useEffect(() => {
         const handleSeen = (conversationId) => {
-            if(conversationId !== activeChat?._id) return
-            
+            if (conversationId !== activeChat?._id) return
+
             setMessages((prev) =>
-                prev.map((msg) =>({
+                prev.map((msg) => ({
                     ...msg,
                     isSeen: msg.senderId._id === loggedInUserId ? true : msg.isSeen
                 }))
@@ -179,13 +164,13 @@ export default function ChatWindow({ activeChat, loggedInUserId, setActiveChat }
     }, [activeChat?._id])
 
     if (!activeChat) {
-    return (
-        <div className="chatwindow-wrapper">
-        <div className="chat-window-empty">
-            <p>Select a chat to start messaging</p>
-        </div>
-        </div>
-    );
+        return (
+            <div className="chatwindow-wrapper">
+                <div className="chat-window-empty">
+                    <p>Select a chat to start messaging</p>
+                </div>
+            </div>
+        );
     }
 
     const otherUser = activeChat?.members?.find(
@@ -195,117 +180,116 @@ export default function ChatWindow({ activeChat, loggedInUserId, setActiveChat }
     return (
         <div className="chatwindow-wrapper">
 
-        <div className="chat-header">
+            <div className="chat-header">
 
-            <button
-                className="chat-back-btn"
-                onClick={() => setActiveChat(null)}
-            >
-                <FaArrowLeft />
-            </button>
+                <button
+                    className="chat-back-btn"
+                    onClick={() => setActiveChat(null)}
+                >
+                    <FaArrowLeft />
+                </button>
 
-            <img
-            src={
-                otherUser
-                ?.avatar ||
-                "default-avatar.png"
-            }
-            className="chat-header-avatar"
-            />
+                <img
+                    src={
+                        otherUser
+                            ?.avatar ||
+                        "default-avatar.png"
+                    }
+                    className="chat-header-avatar"
+                />
 
-            <h3>
-            {
-                otherUser
-                ?.fullName
-            }
-            </h3>
-        </div>
-
-        <div className="messages-container">
-            {messages.map((msg, index) => {
-                const currentDate = new Date(msg.createdAt).toDateString()
-                const prevDate = 
-                    index > 0
-                        ? new Date(messages[index - 1].createdAt).toDateString()
-                        : null
-
-                const showDateSeparator = currentDate !== prevDate
-                const isMe = msg.senderId?._id === loggedInUserId;
-
-            return (
-                <div key={msg._id}>
-                    {showDateSeparator && (
-                        <div className="date-separator">
-                            {formatDateSeparator(msg.createdAt)}
-                        </div>
-                    )}
-                    <div
-                    className={`message-row ${
-                        isMe
-                        ? "me"
-                        : "other"
-                    }`}
-                    >
-                    <div className="bubble">
-                        <p>{msg.text}</p>
-                        <div className="msg-footer">
-                            <p className="msg-time">
-                                {formatMessageTime(msg.createdAt)}
-                            </p>
-                            {isMe && msg.isSeen && (
-                                <p className="seen-status">Seen</p>
-                            )}
-                        </div>
-                        {isMe && (
-                            <div className="msg-menu-wrapper">
-                                <button
-                                    className="msg-menu-btn"
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        setShowMessageMenu(showMessageMenu === msg._id ? null : msg._id)
-                                    }}
-                                    title="Delete message"
-                                >
-                                    ▼
-                                </button>
-                                {showMessageMenu === msg._id && (
-                                    <div className="msg-menu-dropdown">
-                                        <button
-                                            className="msg-menu-item delete-msg-option"
-                                            onClick={(e) => deleteMessage(msg._id, e)}
-                                        >
-                                            🗑️ Delete
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                    </div>
-                </div>
-            );
-            })} 
-
-            {isTyping && (
-            <div className="typing-area">
-                <div className="typing-wrapper">
-                    <div className="typing-indicator">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
+                <h3>
+                    {
+                        otherUser
+                            ?.fullName
+                    }
+                </h3>
             </div>
 
-        )}
+            <div className="messages-container">
+                {messages.map((msg, index) => {
+                    const currentDate = new Date(msg.createdAt).toDateString()
+                    const prevDate =
+                        index > 0
+                            ? new Date(messages[index - 1].createdAt).toDateString()
+                            : null
 
-        </div>
+                    const showDateSeparator = currentDate !== prevDate
+                    const isMe = msg.senderId?._id === loggedInUserId;
+
+                    return (
+                        <div key={msg._id}>
+                            {showDateSeparator && (
+                                <div className="date-separator">
+                                    {formatDateSeparator(msg.createdAt)}
+                                </div>
+                            )}
+                            <div
+                                className={`message-row ${isMe
+                                        ? "me"
+                                        : "other"
+                                    }`}
+                            >
+                                <div className="bubble">
+                                    <p>{msg.text}</p>
+                                    <div className="msg-footer">
+                                        <p className="msg-time">
+                                            {formatMessageTime(msg.createdAt)}
+                                        </p>
+                                        {isMe && msg.isSeen && (
+                                            <p className="seen-status">Seen</p>
+                                        )}
+                                    </div>
+                                    {isMe && (
+                                        <div className="msg-menu-wrapper">
+                                            <button
+                                                className="msg-menu-btn"
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setShowMessageMenu(showMessageMenu === msg._id ? null : msg._id)
+                                                }}
+                                                title="Delete message"
+                                            >
+                                                ▼
+                                            </button>
+                                            {showMessageMenu === msg._id && (
+                                                <div className="msg-menu-dropdown">
+                                                    <button
+                                                        className="msg-menu-item delete-msg-option"
+                                                        onClick={(e) => deleteMessage(msg._id, e)}
+                                                    >
+                                                        🗑️ Delete
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
+
+                {isTyping && (
+                    <div className="typing-area">
+                        <div className="typing-wrapper">
+                            <div className="typing-indicator">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                )}
+
+            </div>
 
 
-        <MessageInput
-            activeChat={activeChat}
-            setMessages={setMessages}
-        />
+            <MessageInput
+                activeChat={activeChat}
+                setMessages={setMessages}
+            />
 
         </div>
     );
