@@ -119,7 +119,7 @@ State management in React
 Secure authentication system
 
 ## Screenshots
-![Home](./screenshots/home.png)
+![Home](./screenshots/home.png) ![Chat](./screenshots/chat.png)
 
 ⚠️ Known Issues
 Backend may take time to respond initially (Render free tier sleep mode)
